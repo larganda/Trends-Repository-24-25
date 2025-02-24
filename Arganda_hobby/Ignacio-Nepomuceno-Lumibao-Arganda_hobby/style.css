@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+/* General body styling */
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Main heading */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    background-color: #ffcc99;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Section headings */
+h2 {
+    text-align: center;
+    color: #444;
+    margin-top: 20px;
+}
+
+h3{
+    text-align: center;
+    padding: 10px;
+    background-color: #ffebcc;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 700px;
+}
+
+/* General paragraph styling */
+p {
+    text-align: center;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #ffebcc;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 700px;
+}
+
+/* Hobbies Container */
+.hobbies-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #eab885;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* List Styling */
+.hobby-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Hobby-items */
+.hobby-item {
+    background: white;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 3px solid #6f6d6d; /* Default border color */
+}
+
+/* Hobby Title */
+.hobby-item strong {
+    font-size: 18px;
+    color: #444;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Images & Videos inside hobbies */
+.hobby-item img,
+.hobby-item video {
+    display: block;
+    margin: 10px auto;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    max-height: fit-content;
+    border: 2px solid #ddd;
+    padding: 5px;
+    background: white;
+}
+
+.jogging-images {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap; 
+}
+
+.jogging-images img {
+    width: 45%; 
+    max-width: 300px;
+}
+
+.hobby-images {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap; 
+}
+
+.hobby-images img {
+    width: 30%; 
+    max-width: 300px;
+}
+
+/* Benefits Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 10px;
+}
+
+th {
+    background-color: #ffcc99;
+    color: black;
+}
+
+tr:nth-child(even) {
+    background-color: #fff;
+}
+
+tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
