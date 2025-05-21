@@ -1,0 +1,567 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maintenance Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #113c23;
+      line-height: 1.6;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 60px;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #113c23;
+      font-weight: 500;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: #10b981;
+      transform: translateY(-2px);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #10b981;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .user-profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .user-profile:hover {
+      transform: scale(1.05);
+    }
+
+    .user-profile img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .user-profile img:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      min-width: 150px;
+      z-index: 1000;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-menu a {
+      padding: 12px 16px;
+      text-decoration: none;
+      color: #113c23;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f0f9f6;
+      color: #10b981;
+      padding-left: 20px;
+    }
+
+    /* Main Content Styles */
+    main {
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: pageLoad 0.5s ease;
+    }
+
+    @keyframes pageLoad {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      color: #113c23;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .main-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      margin: 15px auto;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .main-title:hover::after {
+      width: 120px;
+    }
+
+    .intro-text {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      line-height: 1.8;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      padding: 2.5rem;
+      width: 350px;
+      text-align: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #10b981, #3b82f6);
+      transition: 0.5s;
+    }
+
+    .card:hover::before {
+      left: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+    }
+
+    .card img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      margin-bottom: 1.8rem;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.08) rotate(2deg);
+    }
+
+    .card h2 {
+      font-size: 1.6rem;
+      color: #113c23;
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover h2 {
+      color: #10b981;
+    }
+
+    .card p {
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .learn-more {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      background-size: 200% auto;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .learn-more::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .learn-more:hover::before {
+      left: 100%;
+    }
+
+    .learn-more:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .learn-more:active {
+      transform: translateY(0);
+    }
+
+    .maintenance-tips {
+      background-color: #f8fafc;
+      border-radius: 20px;
+      padding: 3rem;
+      margin-top: 3rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .maintenance-tips:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .tips-title {
+      font-size: 1.8rem;
+      color: #113c23;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .tips-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      margin: 10px auto;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .tips-title:hover::after {
+      width: 100px;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .tip-item {
+      background: white;
+      padding: 1.8rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tip-item::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #10b981, #3b82f6);
+      transition: width 0.3s ease;
+    }
+
+    .tip-item:hover::before {
+      width: 100%;
+    }
+
+    .tip-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(16, 185, 129, 0.1);
+    }
+
+    .tip-icon {
+      color: #10b981;
+      font-size: 1.7rem;
+      min-width: 40px;
+      transition: transform 0.3s ease;
+    }
+
+    .tip-item:hover .tip-icon {
+      transform: scale(1.2);
+    }
+
+    .tip-content h3 {
+      color: #113c23;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .tip-item:hover .tip-content h3 {
+      color: #10b981;
+    }
+
+    .tip-content p {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .card {
+        width: 100%;
+        padding: 2rem;
+      }
+
+      .card img {
+        width: 160px;
+        height: 160px;
+      }
+
+      .maintenance-tips {
+        padding: 2rem 1.5rem;
+      }
+
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    function toggleDropdown() {
+      const menu = document.getElementById("dropdown-menu");
+      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+    }
+
+    window.addEventListener("click", function (e) {
+      const dropdown = document.getElementById("dropdown-menu");
+      const profile = document.querySelector(".user-profile img");
+      if (!profile.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    // Add page load animations
+    document.addEventListener("DOMContentLoaded", function() {
+      // Stagger animation for cards
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.5s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 300 + (index * 100));
+      });
+
+      // Stagger animation for tips
+      const tips = document.querySelectorAll('.tip-item');
+      tips.forEach((tip, index) => {
+        tip.style.opacity = '0';
+        tip.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          tip.style.transition = 'all 0.5s ease';
+          tip.style.opacity = '1';
+          tip.style.transform = 'translateY(0)';
+        }, 800 + (index * 100));
+      });
+    });
+  </script>
+
+  <header>
+    <nav>
+     <a href="{% url 'home_page_with_account' %}">Home</a>
+       <a href="{% url 'showcase_with_account' %}">Showcase</a>
+       <a href="{%url 'registration' %}">Registration</a>
+       <a href="{% url 'regulations' %}">Regulations</a>
+       <a href="{%url 'maintenance_main' %}">Maintenance</a>
+    </nav>
+
+    <!-- User profile dropdown -->
+    <div class="user-profile">
+      <img src="{% static 'images/user_logo.png' %}" alt="User Profile" onclick="toggleDropdown()" />
+      <div id="dropdown-menu" class="dropdown-menu">
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'homepage' %}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1 class="main-title">Maintenance Guide</h1>
+    <p class="intro-text">
+      Keep your e-bike running smoothly with our comprehensive maintenance guides. 
+      Whether it's battery care, tire maintenance, or regular servicing, 
+      we've got you covered with expert tips and step-by-step instructions.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <a href="{% url 'maintenance_battery' %}" style="text-decoration: none; color: inherit;">
+          <img src="{% static 'images/battery.png' %}" alt="Battery">
+          <h2>Battery</h2>
+          <p>Learn how to properly charge, store, and maintain your e-bike battery for optimal performance and longevity.</p>
+          <span class="learn-more">Learn More</span>
+        </a>
+      </div>
+      <div class="card">
+        <a href="{% url 'maintenance_tire' %}" style="text-decoration: none; color: inherit;">
+          <img src="{% static 'images/tire.png' %}" alt="Tire">
+          <h2>Tire</h2>
+          <p>Discover proper tire pressure, tread inspection, and replacement guidelines for a smooth and safe ride.</p>
+          <span class="learn-more">Learn More</span>
+        </a>
+      </div>
+      <div class="card">
+        <a href="{% url 'maintenance_services' %}" style="text-decoration: none; color: inherit;">
+          <img src="{% static 'images/services.png' %}" alt="Services">
+          <h2>Services</h2>
+          <p>Find out about recommended service intervals and what to expect during professional maintenance checks.</p>
+          <span class="learn-more">Learn More</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="maintenance-tips">
+      <h2 class="tips-title">Quick Maintenance Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-item">
+          <div class="tip-icon">🔋</div>
+          <div class="tip-content">
+            <h3>Battery Care</h3>
+            <p>Charge your battery after every ride and store it in a cool, dry place when not in use for extended periods.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🔄</div>
+          <div class="tip-content">
+            <h3>Regular Cleaning</h3>
+            <p>Clean your e-bike monthly with a damp cloth and mild detergent, avoiding direct water spray on electrical components.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🔧</div>
+          <div class="tip-content">
+            <h3>Brake Check</h3>
+            <p>Test your brakes before every ride and have them professionally serviced every 500 miles or when you notice reduced performance.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">⚡</div>
+          <div class="tip-content">
+            <h3>Electrical Safety</h3>
+            <p>Regularly inspect wiring and connections for damage, and keep all electrical contacts clean and dry.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🛞</div>
+          <div class="tip-content">
+            <h3>Tire Pressure</h3>
+            <p>Check tire pressure weekly and maintain the recommended PSI for better efficiency and reduced wear.</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">⏱️</div>
+          <div class="tip-content">
+            <h3>Scheduled Maintenance</h3>
+            <p>Follow the manufacturer's maintenance schedule to keep your warranty valid and ensure optimal performance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

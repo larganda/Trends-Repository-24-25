@@ -1,0 +1,963 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Regulations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-weight: lighter;
+      background-color: #ffffff;
+      color: #113c23;
+      line-height: 1.6;
+    }
+
+    /* Updated Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 60px;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 17px;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: #4C9444;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #4C9444;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .user-profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+    }
+
+    .user-profile img:hover {
+      transform: scale(1.1);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      min-width: 150px;
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .dropdown-menu a {
+      padding: 12px 16px;
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background: #4C9444;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      padding: 60px 80px;
+      gap: 40px;
+      flex-wrap: wrap;
+      background: url("{% static 'images/traffic-pattern.png' %}") no-repeat;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 0;
+    }
+
+    .left, .right {
+      position: relative;
+      z-index: 1;
+    }
+
+    .left {
+      flex: 1 1 50%;
+      min-width: 300px;
+    }
+
+    .left h1 {
+      font-size: 3.3rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      color: #0a5b30;
+      line-height: 1.2;
+    }
+
+    .left p {
+      font-size: 1.3rem;
+      color: #222;
+      margin-bottom: 20px;
+      max-width: 600px;
+    }
+
+    .right {
+      flex: 1 1 30%;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background-color: #fff;
+      border-radius: 30px;
+      border: 1px solid #aaa;
+      box-shadow: 3px 4px 0 #aaa;
+      text-decoration: none;
+      color: #000;
+      font-size: 1rem;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(76, 148, 68, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 6px 0 #888;
+      border-color: #4C9444;
+      color: #0a5b30;
+    }
+
+    .arrow {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .btn:hover .arrow {
+      transform: translateX(5px);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: #fff;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 12px;
+      padding: 40px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border-top: 5px solid #4C9444;
+    }
+
+    .modal-content h2 {
+      color: #0a5b30;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .modal-content h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: #4C9444;
+    }
+
+    .modal-content h3 {
+      font-size: 1.2rem;
+      margin-top: 2rem;
+      color: #0a5b30;
+      border-left: 4px solid #4C9444;
+      padding-left: 10px;
+    }
+
+    .modal-content p {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .modal-content b {
+      font-weight: 700;
+      color: #0a5b30;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: #888;
+      transition: color 0.3s;
+    }
+
+    .close:hover {
+      color: #f44336;
+    }
+
+    .signal-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 30px;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #4C9444;
+      transition: transform 0.3s;
+    }
+
+    .signal-section:hover {
+      transform: translateX(5px);
+    }
+
+    .signal-img {
+      width: 100px;
+      height: auto;
+      flex-shrink: 0;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .signal-text {
+      flex: 1;
+    }
+
+    .markings-pairs {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin-top: 30px;
+      padding-left: 20px;
+    }
+
+    .marking-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .marking-row:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .marking-text {
+      flex: 1;
+    }
+
+    .marking-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .marking-image img {
+      width: 70%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .marking-image img:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      background: linear-gradient(to right, #113c23, #0a5b30);
+      color: white;
+      padding: 40px 60px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: #4C9444;
+    }
+
+    .footer-section p, .footer-section a {
+      color: #ddd;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    .footer-section a {
+      display: block;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+      color: #4C9444;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      color: #4C9444;
+    }
+
+    .copyright {
+      width: 100%;
+      text-align: center;
+      padding-top: 20px;
+      margin-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.8rem;
+    }
+
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #4C9444;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .scroll-top.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      background: #0a5b30;
+      transform: translateY(-5px);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .container {
+        flex-direction: column;
+        padding: 40px;
+      }
+      .right {
+        align-items: stretch;
+      }
+
+      .left h1 {
+        font-size: 2.5rem;
+      }
+
+      .modal-content {
+        padding: 30px 20px;
+      }
+
+      .marking-row {
+        flex-direction: column;
+      }
+
+      .marking-image img {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+       <a href="{% url 'home_page_with_account' %}">Home</a>
+       <a href="{% url 'showcase_with_account' %}">Showcase</a>
+       <a href="{%url 'registration' %}">Registration</a>
+       <a href="{% url 'regulations' %}">Regulations</a>
+       <a href="{%url 'maintenance_main' %}">Maintenance</a>
+    </nav>
+    
+    <div class="user-profile">
+      <img src="{% static 'images/user_logo.png' %}" alt="User Profile" onclick="toggleDropdown()" />
+      <div id="dropdown-menu" class="dropdown-menu">
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'homepage' %}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="left">
+      <h1>Safety and Traffic Guidelines</h1>
+      <p>A list that outlines the most important traffic rules and regulations that all drivers must know to ensure the safety of all drivers.</p>
+      <p>All safety and traffic guidelines presented in this page is created and managed by the Land Transportation Office (LTO) of the Philippines.</p>
+    </div>
+
+    <div class="right">
+      <div class="btn" onclick="openModal('roadsignsModal')">Road Traffic Signs <span class="arrow">→</span></div>
+      <div class="btn" onclick="openModal('pavementModal')">Pavement Markings <span class="arrow">→</span></div>
+      <div class="btn" onclick="openModal('basicsModal')">Traffic Basics <span class="arrow">→</span></div>
+      <div class="btn" onclick="openModal('adminModal')">Administrative Order 2021-039 <span class="arrow">→</span></div>
+      <div class="btn" onclick="openModal('crashModal')">In Case of Road Crash <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <div id="roadsignsModal" class="modal">
+    <div class="modal-content" style="padding-left: 40px; padding-right: 20px;">
+      <h2 style="color: #004d26;">Road Traffic Signs</h2>
+  
+      <h3 style="color: #004d26;">Section 1 REGULATORY SIGNS</h3>
+      <p>
+        Signs that inform road users of traffic laws and regulations which, if disregarded, will constitute an offense.
+      </p>
+  
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; align-items: center; text-align: center;">
+        <div><img src="{% static 'images/stopsign.png' %}" style="width: 50%;"><p><strong>STOP SIGN</strong> - driver must stop at designated STOP LINE. No parking within 6 meters</p></div>
+        <div><img src="{% static 'images/giveway.png' %}" style="width: 50%;"><p><strong>GIVE WAY SIGN</strong> - yield to the vehicles on right side of intersection</p></div>
+        <div><img src="{% static 'images/noentry.png' %}" style="width: 50%;"><p><strong>NO ENTRY</strong> for ALL TYPES OF VEHICLE</p></div>
+  
+        <div><img src="{% static 'images/nocar.png' %}" style="width: 50%;"><p>NO CARS</p></div>
+        <div><img src="{% static 'images/nojeep.png' %}" style="width: 50%;"><p>NO JEEPNEYS</p></div>
+        <div><img src="{% static 'images/nobus.png' %}" style="width: 50%;"><p>NO BUSES</p></div>
+        <div><img src="{% static 'images/notruck.png' %}" style="width: 50%;"><p>NO TRUCKS</p></div>
+        <div><img src="{% static 'images/nobike.png' %}" style="width: 50%;"><p>NO BICYCLES</p></div>
+        <div><img src="{% static 'images/nomotor.png' %}" style="width: 50%;"><p>NO MOTORCYCLES</p></div>
+        <div><img src="{% static 'images/notike.png' %}" style="width: 50%;"><p>NO TRICYCLES</p></div>
+        <div><img src="{% static 'images/notrailer.png' %}" style="width: 50%;"><p>NO VEHICLES WITH TRAILER</p></div>
+
+        <div><img src="{% static 'images/noright.png' %}" style="width: 50%;"><p>NO RIGHT TURN</p></div>
+        <div><img src="{% static 'images/noleft.png' %}" style="width: 50%;"><p>NO LEFT TURN</p></div>
+        <div><img src="{% static 'images/nouturn.png' %}" style="width: 50%;"><p>NO U-TURN - vehicles are not allowed to make a U-turn</p></div>
+        <div><img src="{% static 'images/noovertake.png' %}" style="width: 50%;"><p>NO OVERTAKING ZONE</p></div>
+  
+        <div><img src="{% static 'images/nostop.png' %}" style="width: 50%;"><p>No stopping anytime</p></div>
+        <div><img src="{% static 'images/noload.png' %}" style="width: 50%;"><p>No loading and unloading zone</p></div>
+        <div><img src="{% static 'images/nowait.png' %}" style="width: 50%;"><p>No waiting</p></div>
+      </div>
+  
+      <h3 style="color: #004d26; margin-top: 30px;">Section 2 WARNING SIGNS</h3>
+      <p>
+        Signs used to warn motorists of potentially hazardous conditions on or adjacent to the road. It advises motorists of road conditions that require caution and may call for a reduction in speed, in the interest of safety and that of other road users.
+      </p>
+  
+      <p style="align-items: center; text-align: center;"><strong>Horizontal Signs<br></strong>These signs are used to indicate the type of road curve ahead of the motorist.</p>
+  
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 15px; text-align: center;">
+        <div><img src="{% static 'images/sharp.png' %}" style="width: 90%;"><p>SHARP TURN</p></div>
+        <div><img src="{% static 'images/doublesharp.png' %}" style="width: 90%;"><p>DOUBLE SHARP TURN</p></div>
+        <div><img src="{% static 'images/curve.png' %}" style="width: 90%;"><p>CURVE</p></div>
+        <div><img src="{% static 'images/doublecurve.png' %}" style="width: 90%;"><p>DOUBLE CURVE</p></div>
+        <div><img src="{% static 'images/winding.png' %}" style="width: 90%;"><p>WINDING ROAD</p></div>
+        <div><img src="{% static 'images/hairpin.png' %}" style="width: 90%;"><p>HAIRPIN BEND</p></div>
+      </div>
+  
+      <p style="align-items: center; text-align: center; margin-top: 30px;"><strong>Advance Warning / Traffic Control Device Signs<br></strong>These signs are used to indicate signalized intersection and to warn the presence<br>of STOP and GIVE WAY signs.</p>
+  
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 5px; text-align: center;">
+        <div><img src="{% static 'images/trafficlight.png' %}" style="width: 50%;"><p><strong>Traffic Lights Ahead</strong> - drivers must be prepared to stop at the upcoming traffic lights as it regulates the flow of vehicles and pedestrians at intersections</p></div>
+        <div><img src="{% static 'images/stopahead.png' %}" style="width: 50%;"><p><strong>Stop Sign Ahead</strong> - warns drivers that a stop sign is located a short distance ahead as it requires drivers to prepare to stop which reduces the risk of accidents at the intersection</p></div>
+        <div><img src="{% static 'images/givewaysign.png' %}" style="width: 50%;"><p><strong>Give Way Sign Ahead</strong> - requires drivers to be prepared to stop and give way to other traffic which helps maintain smooth traffic flow and prevents collisions</p></div>
+      </div>
+
+      <p style="align-items: center; text-align: center; margin-top: 30px;"><strong>Road Width Signs</p>
+  
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 5px; text-align: center;">
+        <div><img src="{% static 'images/narrowroad.png' %}" style="width: 85%;"><p>Road Narrows Ahead</p></div>
+        <div><img src="{% static 'images/narrowbridge.png' %}" style="width: 85%;"><p>Narrow Bridge Ahead</p></div>
+        <div><img src="{% static 'images/dividedroad.png' %}" style="width: 50%;"><p>Divided Road Ahead</p></div>
+        <div><img src="{% static 'images/endofroad.png' %}" style="width: 50%;"><p>End of Divided Road Ahead</p></div>
+      </div>
+
+      <p style="align-items: center; text-align: center; margin-top: 30px;"><strong>Road Obstacle Signs</p>
+      <div style=" margin-top: 5px; text-align: center;">
+        <div><img src="{% static 'images/roadobstaclessign.png' %}" style="width: 75%;"></div> </div>
+      
+    </div>
+  </div>
+  
+  <div class="modal" id="pavementModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('pavementModal')">✖</span>
+      <h2 style="text-align: center; margin-top: 20px;">Pavement Markings</h2>
+      <p>These are in the form of lines, symbols, messages, or numerals and may be set into the surface of, applied upon, or attached to the pavement. In some cases, pavement markings are used as a supplement to other traffic control devices, such as traffic signals and road signs. It simply guides traffic, gives advance warning, or may impose restrictions supported by traffic regulations.</p>
+
+      <h3 style="margin-top: 20px;">Longitudinal Lines</h3>
+
+      <div class="markings-pairs">
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>1. CENTER or SEPARATION LINE</b> - crossing of solid white lines requires special care and is discouraged</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/center.png' %}" alt="Separation Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>2. LANE LINE</b> - changing of lane is allowed provided that it is safe and will not result to obstruction</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/laneline.png' %}" alt="Lane Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>3. BARRIER LINE</b><br><br></p>
+            <p><b>a. DOUBLE SOLID YELLOW LINES</b> - No overtaking and no crossing</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/doublesolid.png' %}" alt="Double Solid Yellow Lines">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>b. SINGLE SOLID YELLOW LINE</b> - Crossing is allowed but no overtaking</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/singlesolid.png' %}" alt="Single Yellow Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>c. SINGLE YELLOW LINE WITH BROKEN WHITE LINE</b><br>No overtaking but crossing is allowed on the side of the solid yellow line. Overtaking and crossing is allowed on the side of the broken white line.</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/singleyellow.png' %}" alt="Yellow and White Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>d. BROKEN YELLOW LINE</b> - Crossing and overtaking is allowed with necessary precaution</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/brokenyellow.png' %}" alt="Broken Yellow Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>e. BROKEN AND SOLID YELLOW LINE</b> - Crossing and overtaking is allowed on the side of the broken line with caution, but overtaking is not allowed on the side of the solid line</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/brokenandsolid.png' %}" alt="Broken and Solid Yellow Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>4. EDGE LINE</b> - used to separate the outside edge of the road from the shoulder</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/edge.png' %}" alt="Edge Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>5. CONTINUITY LINE</b> - continuity line on the left side means the lane is ending or exiting and that the driver must change lanes if they want to continue in the current direction. Continuity lines on the right mean that the lane will continue unaffected</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/continuity.png' %}" alt="Continuity Line">
+          </div>
+        </div>
+
+      </div>
+
+      <h3 style="margin-top: 20px;">Traverse Lines</h3>
+
+      <div class="markings-pairs">
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>1. STOP LINE</b> - vehicles are required to stop before the white line</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/stop.png' %}" alt="Stop Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>2. PEDESTRIAN INTERSECTION</b> - vehicles are required to stop for pedestrians to cross the road</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/pedestrian.png' %}" alt="Pedestrian Line">
+          </div>
+        </div>
+
+      </div>
+
+      <h3 style="margin-top: 20px;">Other Lines</h3>
+
+      <div class="markings-pairs">
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>1. TURN LINE</b> - used to guide vehicles through a turning movement at intersections</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/turnline.png' %}" alt="Turn Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>2. PARKING BAY</b> - used to designate parking space, but take note of PWD Parking Mark</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/parking.png' %}" alt="Parking Bay">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>3. LOADING AND UNLOADING BAY LANE LINE</b> -  a solid white line used to indicate the proper location of loading and unloading zone with parking restrictions</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/loadingunloading.png' %}" alt="Loading Lane Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>4. DO NOT BLOCK INTERSECTION</b> - lines that form a yellow box within the intersection and yellow diagonal lines forming an "X" inside the box. No vehicle should stay inside the box to avoid obstruction to other motorists</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/donutblock.png' %}" alt="Don't Block">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>5. BUS AND PUJ LANE LINE</b> - a solid yellow line used to separate other vehicles from buses and PUJs and supplemented by raised pavement markers</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/busandpuj.png' %}" alt="Bus Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>6. MOTORCYCLE LANES</b> - lanes allotted for motorcycle riders and can be shared with other vehicles. Riders are not allowed to stay on other lanes unless instructed by enforcers or the rider is turning into an intersection and must signal his/her intention within 100 meters</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/motorcycle.png' %}" alt="Motorcycle Lane">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>7. BICYCLE LANE</b> - painted on the pavement by a solid line along either side of the road. Motor vehicles are not allowed to use this lane</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/bikelane.png' %}" alt="Bike Line">
+          </div>
+        </div>
+
+        <div class="marking-row">
+          <div class="marking-text">
+            <p><b>8. PAVEMENT ARROWS</b> - used for lane control and in white color</p>
+          </div>
+          <div class="marking-image">
+            <img src="{% static 'images/pavementarrows.png' %}"alt="Arrows">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="basicsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('basicsModal')">✖</span>
+      <h2>Traffic Lines and Signals</h2>
+
+      <div class="signal-section">
+        <img src="{% static 'images/red.png' %}" alt="Red Light" class="signal-img">
+        <div class="signal-text">
+          <p><strong>RED SIGNAL</strong> means you must bring your vehicle to a STOP at a marked line.</p>
+          <p><strong>FLASHING RED SIGNAL</strong> means bring your vehicle to a STOP and proceed only when it is safe.</p>
+        </div>
+      </div>
+      
+      <div class="signal-section">
+        <img src="{% static 'images/yellow.png' %}" alt="Yellow Light" class="signal-img">
+        <div class="signal-text">
+          <p><strong>YELLOW / AMBER SIGNAL</strong> indicates that the RED signal is about to appear.</p>
+          <p><strong>FLASHING YELLOW LIGHT</strong> means slow down and proceed with caution.</p>
+        </div>
+      </div>
+      
+      <div class="signal-section">
+        <img src="{% static 'images/green.png' %}"alt="Green Light" class="signal-img">
+        <div class="signal-text">
+          <p><strong>GREEN SIGNAL</strong> means you can proceed, provided you yield to pedestrian and traffic lawfully using the intersection.</p>
+          <p><strong>FLASHING GREEN SIGNAL</strong> means proceed with caution and be prepared for pedestrians who might cross the street.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 30px; text-align: center;">General Responsibilities of a Driver</h2>
+      <p><b>A Responsible Driver must:</b></p>
+      <li>     Secure an appropriate driver's license and carry it at all times while operating a motor vehicle.</li>
+      <li>     Know, follow, and abide by the land transportation laws, rules and regulations.</li>
+      <li>     Be a defensive driver.</li>
+      <li>     Ensure that the vehicle is duly registered.</li>
+      <li>     Secure and safeguard the vehicle until it is returned to the designated location.</li>
+      <li>     Regularly conduct proper inspection for a roadworthy and emission compliant vehicle (BLOWBAGETS/BLOWBAGA).</li>
+      <li>     Ensure that the vehicle is kept clean, tidy and in good running condition at all times.</li>
+      <li>     Be knowledgeable on what to do and act in case of road crash.</li>
+      <li>     Be knowledgeable on the rights and privileges of a driver's license holder.</li>
+      <li>     Always observe road safety, discipline, and courtesy.</li>
+      <li>     Be in a healthy condition.</li>
+    </div>
+  </div>
+
+  <div class="modal" id="adminModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('adminModal')">✖</span>
+        <h2>Administrative Order No. 2021-039</h2>
+        <h3>SUBJECT: Consolidated Guidelines in the Classification, Registration & Operation of All Types of Electric Motor Vehicles</h3>
+        <p></p>
+        <p><b>WHEREAS</b>, pursuant to Republic Act No. 4136 the Land Transportation Office (LTO) is mandated to register roadworthy motor vehicles prior to its use or operation on or upon any highway of the Philippines, and to issue rules and regulations when no specific provision is provided under the said Act;      </p>
+        <p><b>WHEREAS</b>, Administrative Order No. 2006-01 dated 31 March 2006 on the Guidelines in the Registration of Light Electric Vehicles (LEV) and its Implementing Rules and Regulations through Memorandum Circular No. AVT-2012-006 dated 23 May 2008, and Administrative Order No. AHS-2008-014 dated 24 March 2008 on the Guidelines in the Registration of Low Speed Vehicles (LSV) and its Implementing Rules and Regulations through Memorandum Circular No. AHS-2008-070 dated 12 May 2008, and Memorandum Circular No. AVT-2015-1983 dated 02 December 2015 on the Classification and Registration of Electric Tricycle also known as E-Trike have been issued as guidelines in the registration of the aforementioned types of electric vehicles;</p>
+        <p><b>WHEREAS</b>, electric vehicle technology has significantly advanced such that other types of electric vehicles are being manufactured and made available in the market, thus making the current prescribed specifications of Light Electric Vehicles (LEVs) and Low Speed Vehicles (LSV) no longer applicable;</p>
+        <p><b>WHEREAS</b>, in order to cope with advancements in electric vehicle technology, there is a need to consolidate and update the LTO's current issuances and guidelines in recording, registration, and operation of electric vehicles;</p>
+        <p><b>WHEREAS</b>, for reasons of safety and sound public policy, operation of certain electric vehicles will be limited to specific types of road and some types will not be required to be registered;</p>
+        <p><b>WHEREAS</b>, in support of the thrust of the Government towards low carbon urban mobility, the use of electric vehicles is encouraged to save the Dollar reserve from importing fossil fuel and to curve down environmental pollution and the disastrous impacts of climate change;</p>
+        <p><b>NOW, THEREFORE</b>, premises considered, the following rules and regulations governing the classification, registration, and operation of electric vehicles are hereby prescribed and promulgated for the compliance, information, and guidance of all concerned.</p>
+      </div>
+  </div>
+
+  <div class="modal" id="crashModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('crashModal')">✖</span>
+      <h2>In Case of Road Crash</h2>
+      <h3>Duty of driver in case of accident</h3>
+      <p style="font-family:'Quicksand', sans-serif;">In the event that any accident should occur as a result of the operation of a motor vehicle upon a highway, the driver present, shall show his driver's license, give his true name and address and also the true name and address of the owner of the motor vehicle.</p>
+      <p>No driver of a motor vehicle concerned in a vehicular accident shall leave the scene of the accident without aiding the victim, except under any of the following circumstances:</p>
+      <p><b>1. If he is in imminent danger of being seriously harmed by any person or persons by reason of the accident;</b></p>
+      <p><b>2. If he reports the accident to the nearest officer of the law; or</b></p>
+      <p><b>3. If he has to summon a physician or nurse to aid the victim.</b></p>
+    </div>
+  </div>
+
+  <div class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const menu = document.getElementById("dropdown-menu");
+      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+    }
+
+    // Close dropdown if clicked outside
+    window.addEventListener("click", function (e) {
+      const dropdown = document.getElementById("dropdown-menu");
+      const profile = document.querySelector(".user-profile img");
+      if (!profile.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    window.onclick = function(event) {
+      document.querySelectorAll('.modal').forEach(modal => {
+        if (event.target === modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = 'auto';
+        }
+      });
+    }
+
+    // Scroll to top button
+    const scrollTopBtn = document.getElementById('scrollTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollTopBtn.classList.add('active');
+      } else {
+        scrollTopBtn.classList.remove('active');
+      }
+    });
+    
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

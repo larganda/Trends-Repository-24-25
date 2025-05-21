@@ -1,0 +1,881 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Homepage With Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background: linear-gradient(135deg, #e7beb5 0%, #c5efea 100%);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      padding: 15px 60px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: #4C9444;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #4C9444;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .user-profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .user-profile img:hover {
+      transform: scale(1.1);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      min-width: 180px;
+      z-index: 1000;
+      overflow: hidden;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu.show {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .dropdown-menu a {
+      padding: 12px 20px;
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dropdown-menu a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .dropdown-menu a:hover {
+      background: #4C9444;
+      color: white;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f9f9f9 0%, #eef7f6 100%);
+      color: #333;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 80px 60px;
+      min-height: 80vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(197,239,234,0.3) 0%, rgba(255,255,255,0) 70%);
+      z-index: 0;
+    }
+
+    .hero-text {
+      max-width: 50%;
+      margin-left: 6%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text h1 {
+      font-size: 4.5rem;
+      color: #093820;
+      margin: 0 0 20px 0;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 30px;
+      max-width: 80%;
+    }
+
+    .hero-text button {
+      background-color: #4C9444;
+      color: #fff;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(76, 148, 68, 0.4);
+    }
+
+    .hero-text button:hover {
+      background-color: #3a7a34;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(76, 148, 68, 0.5);
+    }
+
+    .hero img {
+      width: 500px;
+      max-width: 100%;
+      margin-right: 6%;
+      position: relative;
+      z-index: 1;
+      animation: float 6s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #093820;
+      margin: 80px 0 50px 0;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #4C9444;
+      border-radius: 2px;
+    }
+
+    .features-section {
+      padding: 60px;
+      background: white;
+      position: relative;
+    }
+
+    .features-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('main/images/dots-pattern.png') repeat;
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .features-cards {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card {
+      width: 320px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .feature-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .feature-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .feature-card-content {
+      padding: 25px;
+    }
+
+    .feature-card-content h3 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #093820;
+    }
+
+    .feature-card-content p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .feature-card-content a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      color: #4C9444;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card-content a:hover {
+      color: #3a7a34;
+      gap: 12px;
+    }
+
+    .feature-card-content a i {
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card-content a:hover i {
+      transform: translateX(5px);
+    }
+
+    .products-section {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #f5fbfa 0%, #e8f4f2 100%);
+    }
+
+    .products-grid {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 50px;
+    }
+
+    .product-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      width: 280px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      text-align: left;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .product-card.featured {
+      transform: scale(1.05);
+      border: 2px solid #4C9444;
+      box-shadow: 0 12px 24px rgba(76, 148, 68, 0.2);
+    }
+
+    .product-card.featured::after {
+      content: 'Featured';
+      position: absolute;
+      top: 15px;
+      right: -30px;
+      background: #4C9444;
+      color: white;
+      padding: 5px 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transform: rotate(45deg);
+    }
+
+    .product-card img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .product-card h3 {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      color: #093820;
+    }
+
+    .product-price {
+      color: #4C9444;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .product-brand {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .show-more-btn {
+      margin-top: 50px;
+      background: #4C9444;
+      padding: 15px 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(76, 148, 68, 0.4);
+    }
+
+    .show-more-btn:hover {
+      background: #3a7a34;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(76, 148, 68, 0.5);
+    }
+
+    footer {
+      background: linear-gradient(135deg, #093820 0%, #0a5b30 100%);
+      color: white;
+      padding: 60px 20px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('main/images/dots-pattern-white.png') repeat;
+      opacity: 0.1;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-logo {
+      flex: 1;
+      min-width: 300px;
+      text-align: center;
+    }
+
+    .footer-logo img {
+      height: 180px;
+      margin-bottom: 20px;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-logo p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      flex: 1;
+      min-width: 200px;
+      text-align: left;
+    }
+
+    .footer-links h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-links h3::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: #4C9444;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: #ddd;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .footer-links a:hover {
+      color: #4C9444;
+      padding-left: 5px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: #4C9444;
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      margin-top: 50px;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #4C9444;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(76, 148, 68, 0.5);
+      transition: all 0.3s ease;
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .scroll-top.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      background: #3a7a34;
+      transform: translateY(-5px);
+    }
+
+    /* Responsive styles */
+    @media (max-width: 1024px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 30px;
+      }
+      
+      .hero-text {
+        max-width: 100%;
+        margin-left: 0;
+        margin-bottom: 40px;
+      }
+      
+      .hero-text p {
+        max-width: 100%;
+      }
+      
+      .hero img {
+        margin-right: 0;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 30px;
+      }
+      
+      nav {
+        gap: 20px;
+      }
+      
+      .hero-text h1 {
+        font-size: 3rem;
+      }
+      
+      .feature-card {
+        width: 100%;
+        max-width: 350px;
+      }
+      
+      .product-card {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      
+      .footer-links {
+        text-align: center;
+      }
+      
+      .footer-links h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 15px 20px;
+      }
+      
+      nav {
+        gap: 15px;
+        font-size: 0.9rem;
+      }
+      
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="mainHeader">
+    <nav>
+       <a href="{% url 'home_page_with_account' %}">Home</a>
+       <a href="{% url 'showcase_with_account' %}">Showcase</a>
+       <a href="{%url 'registration' %}">Registration</a>
+       <a href="{% url 'regulations' %}">Regulations</a>
+       <a href="{%url 'maintenance_main' %}">Maintenance</a>
+    </nav>
+  
+    <div class="user-profile">
+      <img src="{% static 'images/user_logo.png' %}" alt="User Profile" onclick="toggleDropdown()" />
+      <div id="dropdown-menu" class="dropdown-menu">
+        <a href="{% url 'about' %}"><i class="fas fa-user"></i> About</a>
+        <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a>
+        <a href="{% url 'homepage' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Ride Smarter,<br>Ride Safer.</h1>
+      <p>Discover the future of eco-friendly transportation with our premium selection of electric vehicles and comprehensive guides.</p>
+    </div>
+    <img src="{% static 'images/homee.png' %}" alt="Hero Image">
+  </section>
+  
+  <section class="products-section">
+    <h2 class="section-title">Browse Latest Models</h2>
+    <div class="products-grid">
+      <div class="product-card">
+        <img src="{% static 'images/side_1.png' %}" alt="Mini ECar">
+        <h3>Mini ECar</h3>
+        <div class="product-price">Php 150,000</div>
+        <div class="product-brand">SUNTIGER ENTERPRISES</div>
+      </div>
+
+      <div class="product-card featured">
+        <img src="{% static 'images/homee.png' %}" alt="ERV S3">
+        <h3>ERV S3</h3>
+        <div class="product-price">Php 59,800</div>
+        <div class="product-brand">NWOW</div>
+      </div>
+  
+      <div class="product-card">
+        <img src="{% static 'images/side_2.png' %}" alt="GB2">
+        <h3>GB2</h3>
+        <div class="product-price">Php 24,000</div>
+        <div class="product-brand">NWOW</div>
+      </div>
+    </div>
+  
+    <a href="{% url 'showcase_with_account' %}">
+      <button class="show-more-btn">Show More</button>
+    </a>
+  </section>
+  
+  <section class="features-section">
+    <h2 class="section-title">Explore Other Features</h2>
+    <div class="features-cards">
+      <div class="feature-card">
+        <img src="{% static 'images/feature1.png' %}" alt="E-Bike Registration Guide">
+        <div class="feature-card-content">
+          <h3>E-Bike Registration Guide</h3>
+          <p>This guide provides a step-by-step process for registering your E-Bike at city hall, including required documents, fees, and important regulations to ensure a hassle-free registration experience.</p>
+          <a href="{%url 'registration' %}">Learn more <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <img src="{% static 'images/feature2.png' %}" alt="Safety and Traffic Guidelines">
+        <div class="feature-card-content">
+          <h3>Safety and Traffic Guidelines</h3>
+          <p>Learn the most important regulations all drivers must know. All rules and regulations presented in this guide is created and managed by the Land Transportation Office (LTO) of the Philippines.</p>
+          <a href="{%url 'regulations' %}">Learn more <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="feature-card">
+        <img src="{% static 'images/feature3.png' %}" alt="E-Bike Maintenance Guide">
+        <div class="feature-card-content">
+          <h3>E-Bike Maintenance Guide</h3>
+          <p>Check all your essential vehicle components, including battery charging, tire checks, and also servicing. Promote vehicle reliability and prevent breakdowns of your E-Bike.</p>
+          <a href="{%url 'maintenance_main' %}">Learn more <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="{% static 'images/logoo.png' %}" alt="E-WAY Logo">
+        <p>Your trusted guide to eco-friendly transportation and vehicle management in the Philippines.</p>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="{% url 'home_page_with_account' %}">Home</a></li>
+          <li><a href="{% url 'showcase_with_account' %}">Showcase</a></li>
+          <li><a href="{%url 'registration' %}">Registration</a></li>
+          <li><a href="{% url 'regulations' %}">Regulations</a></li>
+          <li><a href="{%url 'maintenance_main' %}">Maintenance</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    
+    <div class="copyright">
+      <p>Copyright © 2025 E-WAY. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <script>
+    // Toggle dropdown menu
+    function toggleDropdown() {
+      const menu = document.getElementById("dropdown-menu");
+      menu.classList.toggle("show");
+    }
+  
+    // Close dropdown when clicking outside
+    window.addEventListener("click", function(e) {
+      const dropdown = document.getElementById("dropdown-menu");
+      const profile = document.querySelector(".user-profile img");
+      if (!e.target.closest(".user-profile")) {
+        dropdown.classList.remove("show");
+      }
+    });
+
+    // Header scroll effect
+    const header = document.getElementById("mainHeader");
+    window.addEventListener("scroll", function() {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+
+    // Scroll to top button
+    const scrollTopBtn = document.getElementById("scrollTop");
+    
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset > 300) {
+        scrollTopBtn.classList.add("active");
+      } else {
+        scrollTopBtn.classList.remove("active");
+      }
+    });
+    
+    scrollTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+
+    // Animation on scroll
+    const animateOnScroll = function() {
+      const elements = document.querySelectorAll('.feature-card, .product-card');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
+        
+        if (elementPosition < screenPosition) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    };
+
+    // Set initial state for animation
+    document.querySelectorAll('.feature-card, .product-card').forEach(element => {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(20px)';
+      element.style.transition = 'all 0.6s ease';
+    });
+
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+  </script>
+</body>
+</html>

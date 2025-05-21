@@ -1,0 +1,374 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services Maintenance Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #113c23;
+      line-height: 1.6;
+      min-height: 100vh;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+    }
+
+    .services-topbar {
+      background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .services-guide {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .back-button-image {
+      width: 30px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .back-button:hover .back-button-image {
+      transform: translateX(-3px);
+    }
+
+    .services-topbar h4 {
+      margin-left: 10px;
+      flex-grow: 1;
+      text-align: right;
+    }
+
+    .guide-box {
+      background-color: #ffffff;
+      border-radius: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 2rem;
+      gap: 2rem;
+      align-items: flex-start;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .guide-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .guide-content {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .intro-text {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #065f46;
+      font-weight: 500;
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .intro-text::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      border-radius: 2px;
+    }
+
+    .guide-content h2 {
+      margin-top: 1.5rem;
+      color: #065f46;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .guide-content h2::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      transition: width 0.3s;
+      border-radius: 3px;
+    }
+
+    .guide-content h2:hover {
+      color: #10b981;
+    }
+
+    .guide-content h2:hover::after {
+      width: 100px;
+    }
+
+    .guide-content h3 {
+      font-size: 1.3rem;
+      color: #047857;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .guide-content h3::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      border-radius: 50%;
+    }
+
+    .guide-content ul {
+      padding-left: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .guide-content li {
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+      position: relative;
+      padding-left: 0.5rem;
+      transition: all 0.3s ease;
+      list-style-type: none;
+    }
+
+    .guide-content li:hover {
+      transform: translateX(5px);
+      color: #065f46;
+    }
+
+    .guide-content li::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 0.6rem;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .guide-content li:hover::before {
+      transform: scale(1.5);
+    }
+
+    .guide-image {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s ease;
+    }
+
+    .guide-image:hover {
+      transform: scale(1.03);
+    }
+
+    .guide-image img {
+      max-width: 200px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    }
+
+    .guide-image img:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transform: rotate(-2deg) scale(1.05);
+    }
+
+    .service-link {
+      display: inline-block;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .service-link:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .services-topbar h4 {
+        font-size: 1.2rem;
+      }
+
+      .guide-box {
+        flex-direction: column;
+        padding: 1.5rem;
+      }
+
+      .guide-content h2 {
+        font-size: 1.5rem;
+      }
+
+      .intro-text {
+        font-size: 1rem;
+      }
+      
+      .services-guide {
+        padding: 1rem;
+        margin: 1rem auto;
+      }
+      
+      .guide-image {
+        margin-top: 1rem;
+        justify-content: flex-start;
+      }
+      
+      .guide-image img {
+        max-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="services-topbar">
+    <button class="back-button" onclick="history.back()">
+      <img src="{% static 'images/back.png' %}" alt="Back" class="back-button-image">
+    </button>
+    <h4>Services Maintenance Guide</h4>
+  </header>
+
+  <main class="services-guide">
+    <section class="guide-box">
+      <div class="guide-content">
+        <p class="intro-text">
+          Regular servicing is key to ensuring your e-bike performs at its best and lasts longer.
+        </p>
+
+        <h2>General E-Bike Care:</h2>
+
+        <h3>Chain and Drive Train:</h3>
+        <ul>
+          <li>Clean the chain: Use a degreaser to clean off any dirt or grease.</li>
+          <li>Lubricate the chain: After cleaning, apply a bike-specific lubricant to prevent wear and rust.</li>
+        </ul>
+
+        <h3>Brake Maintenance:</h3>
+        <ul>
+          <li>Inspect brake pads: Check for wear and replace when they get too thin.</li>
+          <li>Check brake function: Ensure both front and rear brakes are responsive. Adjust cables if necessary.</li>
+        </ul>
+
+        <h3>Display and Controls:</h3>
+        <ul>
+          <li>Test your display: Make sure your display is functioning, showing battery level, speed, and other vital information.</li>
+          <li>Check controls: Ensure the throttle and pedal-assist functions are working properly.</li>
+        </ul>
+
+        <h3>Full Annual Servicing:</h3>
+        <ul>
+          <li>Take it to a professional: Once a year, have a professional technician do a comprehensive inspection and tune-up, including checking the battery, motor, wheels, and overall performance.</li>
+        </ul>
+      </div>
+      <div class="guide-image">
+        <a href="https://www.progroup.com.ph/service-center/" target="_blank" class="service-link">
+          <img src="{% static 'images/services-maintenance.png' %}" alt="Services Maintenance Illustration">
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Adding animations on load
+    document.addEventListener('DOMContentLoaded', function() {
+      const guideBox = document.querySelector('.guide-box');
+      const guideItems = document.querySelectorAll('.guide-content h2, .guide-content h3, .guide-content li');
+      
+      // Initial state for animations
+      guideBox.style.opacity = '0';
+      guideBox.style.transform = 'translateY(20px)';
+      
+      // Animate the guide box
+      setTimeout(() => {
+        guideBox.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        guideBox.style.opacity = '1';
+        guideBox.style.transform = 'translateY(0)';
+      }, 100);
+      
+      // Animate content with staggered delay
+      guideItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(10px)';
+        
+        setTimeout(() => {
+          item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+        }, 300 + (index * 50));
+      });
+      
+      // Enhance hover effects for service link
+      const serviceLink = document.querySelector('.service-link');
+      serviceLink.addEventListener('mouseenter', () => {
+        serviceLink.querySelector('img').style.transform = 'rotate(-2deg) scale(1.05)';
+      });
+      serviceLink.addEventListener('mouseleave', () => {
+        serviceLink.querySelector('img').style.transform = 'rotate(0) scale(1)';
+      });
+    });
+  </script>
+</body>
+</html>

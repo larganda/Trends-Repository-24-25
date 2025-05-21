@@ -1,0 +1,1375 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Bike Showcase</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <style>
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #113c23;
+      line-height: 1.6;
+      min-height: 100vh;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 60px;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      animation: fadeInDown 0.5s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #4C9444;
+      transition: width 0.3s;
+    }
+
+    nav a:hover {
+      color: #4C9444;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .user-profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .user-profile img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      min-width: 150px;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-menu a {
+      padding: 12px 16px;
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f0f0f0;
+      color: #4C9444;
+    }
+
+    /* Admin Controls */
+    .admin-controls {
+      display: none;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+      padding: 0 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .admin-btn {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      background-size: 200% auto;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .admin-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .admin-btn:hover::before {
+      left: 100%;
+    }
+
+    .admin-btn:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Search Box */
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .search-box {
+      width: 60%;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px;
+      padding-right: 40px;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .search-box input:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+      transition: color 0.3s ease;
+    }
+
+    .search-box input:focus + i {
+      color: #10b981;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 500px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #093820;
+    }
+
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      color: #777;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #ef4444;
+      transform: rotate(90deg);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .form-group input, 
+    .form-group textarea, 
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .form-group input:focus, 
+    .form-group textarea:focus, 
+    .form-group select:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* Main Showcase Section */
+    #tranding {
+      padding: 40px 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      font-size: 32px;
+      color: #093820;
+      margin-bottom: 30px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .section-heading::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      bottom: -8px;
+      left: 25%;
+      background: linear-gradient(to right, #10b981, #3b82f6);
+      border-radius: 3px;
+    }
+
+    .tranding-slide {
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .tranding-slide:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .tranding-slide-img {
+      width: 80%;
+      height: 80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .tranding-slide-img:hover {
+      transform: scale(1.05);
+    }
+
+    .tranding-slide-img img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: all 0.3s ease;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #4C9444 !important;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #777;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* Brand Info Section */
+    #brandinfo {
+      display: none;
+      padding: 60px 20px;
+      background-color: white;
+      border-radius: 10px;
+      margin: 40px auto;
+      max-width: 1200px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .containerinfo {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .brandinfo-content {
+      text-align: center;
+    }
+
+    .brandinfo-logo {
+      height: 120px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .brandinfo-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .brandinfo-subheading {
+      font-size: 28px;
+      color: #093820;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .brandinfo-subheading::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      bottom: -8px;
+      left: 25%;
+      background: linear-gradient(to right, #10b981, #3b82f6);
+      border-radius: 3px;
+    }
+
+    .brandinfo-text {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+
+    /* Product Section */
+    #product {
+      display: none;
+      padding: 60px 20px;
+      background-color: white;
+      border-radius: 10px;
+      margin: 40px auto;
+      max-width: 1200px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .product-filter-btns {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .btn-filter {
+      padding: 8px 20px;
+      background: #f0f0f0;
+      border-radius: 30px;
+      list-style: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn-filter:hover, .btn-filter.active {
+      background: linear-gradient(to right, #10b981, #3b82f6);
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    .product-filter-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .mix {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .mix:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .item-top {
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f9f9f9;
+      transition: all 0.3s ease;
+    }
+
+    .item-top:hover {
+      background: #f0f0f0;
+    }
+
+    .item-top img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      transition: all 0.3s ease;
+    }
+
+    .item-top:hover img {
+      transform: scale(1.05);
+    }
+
+    .item-bottom {
+      padding: 20px;
+    }
+
+    .item-heading {
+      font-size: 18px;
+      margin: 0 0 5px 0;
+      color: #333;
+      transition: color 0.3s ease;
+    }
+
+    .mix:hover .item-heading {
+      color: #4C9444;
+    }
+
+    .item-subheading {
+      font-size: 14px;
+      color: #777;
+      margin: 0 0 15px 0;
+    }
+
+    .price-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price {
+      font-size: 18px;
+      color: #4C9444;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .btn-cart {
+      color: #4C9444;
+      font-size: 20px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-cart:hover {
+      color: #3a7a34;
+      transform: scale(1.1);
+    }
+
+    /* Back Button */
+    .back-btn {
+      display: none;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .back-btn:hover::before {
+      left: 100%;
+    }
+
+    .back-btn:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .back-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .search-box {
+        width: 90%;
+      }
+
+      .admin-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .product-filter-items {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-filter-items {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+       <a href="{% url 'home_page_with_account' %}">Home</a>
+       <a href="{% url 'showcase_with_account' %}">Showcase</a>
+       <a href="{%url 'registration' %}">Registration</a>
+       <a href="{% url 'regulations' %}">Regulations</a>
+       <a href="{%url 'maintenance_main' %}">Maintenance</a>
+    </nav>
+    
+    <div class="user-profile" id="user-profile">
+      <img src="{% static 'images/user_logo.png' %}" alt="User Profile" onclick="toggleDropdown()" />
+      <div id="dropdown-menu" class="dropdown-menu">
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'homepage' %}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search Box -->
+  <div class="search-container" id="search-container">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search for e-bike brands or models...">
+      <i class="fas fa-search"></i>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div class="no-results" id="no-results">
+    <h3>No e-bike brands found matching your search</h3>
+    <p>Try a different search term</p>
+  </div>
+
+  <!-- Main Brands Showcase -->
+  <section id="tranding">
+    <div class="container">
+      <h1 class="text-center section-heading">BRANDS</h1>
+    </div>
+    <div class="container">
+      <div class="swiper tranding-slider">
+        <div class="swiper-wrapper" id="brands-container">
+          <!-- Brands will be loaded here dynamically -->
+          <div class="swiper-slide tranding-slide" data-brand="nwow">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('nwow')">
+                <img src="{%static 'images/nwow.png' %}" alt="NWOW">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide tranding-slide" data-brand="hatasu">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('hatasu')">
+                <img src="{% static 'images/hatasu.jpg' %}" alt="Hatasu">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide tranding-slide" data-brand="kenwei">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('kenwei')">
+                <img src="{% static 'images/kenwei.png' %}" alt="Kenwei">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide tranding-slide" data-brand="kuromake">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('kuromake')">
+                <img src="{% static 'images/kuromake.jpg' %}" alt="Kuromake">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide tranding-slide" data-brand="johnson">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('johnson')">
+                <img src="{% static 'images/johnson.jpg' %}" alt="Johnson">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide tranding-slide" data-brand="redstar">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('redstar')">
+                <img src="{% static 'images/redstar.png' %}" alt="Redstar">
+              </a>
+            </div>
+          </div>
+          <div class="swiper-slide tranding-slide" data-brand="surron">
+            <div class="tranding-slide-img">
+              <a href="#" onclick="showBrandInfo('surron')">
+                <img src="{% static 'images/surron.png' %}" alt="Surron">
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="tranding-slider-control">
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Controls (Moved below brands images) -->
+  <div class="admin-controls" id="admin-controls">
+    <button class="admin-btn" onclick="openAddModal()">
+      <i class="fas fa-plus"></i> Add New Brand
+    </button>
+    <button class="admin-btn" onclick="openEditModal()">
+      <i class="fas fa-edit"></i> Edit Brand
+    </button>
+  </div>
+
+  <!-- Brand Info Section (Hidden by default) -->
+  <section id="brandinfo">
+    <div class="containerinfo">
+      <div class="brandinfo-content" id="brandinfo-content">
+        <!-- Content will be loaded dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Section (Hidden by default) -->
+  <section id="product">
+    <div class="container">
+      <div class="product-filter-btns">
+        <li class="btn-filter active" data-filter="all">ALL</li>
+        <li class="btn-filter" data-filter=".twowheels">2-Wheels</li>
+        <li class="btn-filter" data-filter=".threewheels">3-Wheels</li>
+        <li class="btn-filter" data-filter=".fourwheels">4-Wheels</li>
+      </div>
+      <div class="product-filter-items" id="product-filter-items">
+        <!-- Products will be loaded dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Back Button -->
+  <button class="back-btn" id="back-btn" onclick="showBrandsShowcase()">
+    <i class="fas fa-arrow-left"></i> Back to Brands
+  </button>
+
+  <!-- Add Brand Modal -->
+  <div class="modal" id="add-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New E-Bike Brand</h2>
+        <span class="close-btn" onclick="closeModal('add-modal')">&times;</span>
+      </div>
+      <form id="add-form">
+        <div class="form-group">
+          <label for="brand-name">Brand Name</label>
+          <input type="text" id="brand-name" required>
+        </div>
+        <div class="form-group">
+          <label for="brand-image">Image URL</label>
+          <input type="text" id="brand-image" required>
+        </div>
+        <div class="form-group">
+          <label for="brand-description">Description</label>
+          <textarea id="brand-description"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="admin-btn" onclick="closeModal('add-modal')">Cancel</button>
+          <button type="submit" class="admin-btn">Add Brand</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Brand Modal -->
+  <div class="modal" id="edit-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit E-Bike Brand</h2>
+        <span class="close-btn" onclick="closeModal('edit-modal')">&times;</span>
+      </div>
+      <form id="edit-form">
+        <div class="form-group">
+          <label for="edit-brand">Select Brand</label>
+          <select id="edit-brand" required>
+            <option value="">-- Select a brand --</option>
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-brand-name">Brand Name</label>
+          <input type="text" id="edit-brand-name" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-brand-image">Image URL</label>
+          <input type="text" id="edit-brand-image" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-brand-description">Description</label>
+          <textarea id="edit-brand-description"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="admin-btn" onclick="closeModal('edit-modal')">Cancel</button>
+          <button type="submit" class="admin-btn">Update Brand</button>
+          <button type="button" class="admin-btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);" onclick="deleteBrand()">Delete Brand</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js"></script>
+  <script>
+    // Initialize Swiper
+    const swiper = new Swiper('.tranding-slider', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      loop: true,
+      slidesPerView: 'auto',
+      coverflowEffect: {
+        rotate: 0,
+        stretch: 0,
+        depth: 100,
+        modifier: 2.5,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      }
+    });
+
+    // Initialize MixItUp for product filtering
+    let mixer = null;
+    
+    // Check if user is logged in (simplified for demo)
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    updateAuthUI();
+
+    function updateAuthUI() {
+      if (isLoggedIn) {
+        document.getElementById('user-profile').style.display = 'flex';
+        document.getElementById('admin-controls').style.display = 'flex';
+      } else {
+        document.getElementById('user-profile').style.display = 'none';
+        document.getElementById('admin-controls').style.display = 'none';
+      }
+    }
+
+    // Toggle dropdown menu
+    function toggleDropdown() {
+      const menu = document.getElementById("dropdown-menu");
+      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+    }
+
+    // Close dropdown if clicked outside
+    window.addEventListener("click", function(e) {
+      const dropdown = document.getElementById("dropdown-menu");
+      const profile = document.querySelector(".user-profile img");
+      if (!e.target.closest('.user-profile')) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    // Modal functions
+    function openAddModal() {
+      document.getElementById("add-modal").style.display = "flex";
+    }
+
+    function openEditModal() {
+      populateEditBrands();
+      document.getElementById("edit-modal").style.display = "flex";
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener("click", function(e) {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = "none";
+      }
+    });
+
+    // Enhanced Search functionality
+    document.getElementById("search-input").addEventListener("input", function(e) {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      const brands = document.querySelectorAll(".tranding-slide");
+      let hasResults = false;
+
+      // If search is empty, show all brands
+      if (searchTerm === '') {
+        brands.forEach(brand => {
+          brand.style.display = "flex";
+        });
+        document.getElementById("no-results").style.display = "none";
+        return;
+      }
+
+      // Search through brands and products
+      let foundBrands = false;
+      let foundProducts = false;
+      
+      // First search brands
+      brands.forEach(brand => {
+        const brandId = brand.getAttribute('data-brand');
+        const brandName = brand.querySelector("img").alt.toLowerCase();
+        const brandData = getBrandData(brandId);
+        
+        // Check if brand name matches
+        if (brandName.includes(searchTerm)) {
+          brand.style.display = "flex";
+          foundBrands = true;
+          return;
+        }
+        
+        // Check if any product name matches
+        if (brandData && brandData.products) {
+          for (const product of brandData.products) {
+            if (product.name.toLowerCase().includes(searchTerm)) {
+              brand.style.display = "flex";
+              foundBrands = true;
+              break;
+            }
+          }
+        }
+        
+        // If no match found, hide the brand
+        if (!foundBrands) {
+          brand.style.display = "none";
+        }
+      });
+
+      // Show no results message if nothing found
+      document.getElementById("no-results").style.display = foundBrands ? "none" : "block";
+    });
+
+    // Helper function to get brand data
+    function getBrandData(brandId) {
+      return brandData[brandId];
+    }
+
+    // Form submission handlers
+    document.getElementById("add-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      addNewBrand();
+    });
+
+    document.getElementById("edit-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      updateBrand();
+    });
+
+    // Brand management functions
+    function addNewBrand() {
+      const name = document.getElementById("brand-name").value;
+      const imageUrl = document.getElementById("brand-image").value;
+      const description = document.getElementById("brand-description").value;
+
+      const brandsContainer = document.getElementById("brands-container");
+      const newBrand = document.createElement("div");
+      newBrand.className = "swiper-slide tranding-slide";
+      newBrand.setAttribute('data-brand', name.toLowerCase().replace(/\s+/g, '-'));
+      newBrand.innerHTML = `
+        <div class="tranding-slide-img">
+          <a href="#" onclick="showBrandInfo('${name.toLowerCase().replace(/\s+/g, '-')}')">
+            <img src="${imageUrl}" alt="${name}">
+          </a>
+        </div>
+      `;
+      brandsContainer.appendChild(newBrand);
+      
+      // Add to brand data
+      brandData[name.toLowerCase().replace(/\s+/g, '-')] = {
+        name: name,
+        image: imageUrl,
+        description: description,
+        products: []
+      };
+      
+      // Reset form and close modal
+      document.getElementById("add-form").reset();
+      closeModal("add-modal");
+      
+      // Reinitialize Swiper to include new slide
+      swiper.update();
+    }
+
+    function populateEditBrands() {
+      const select = document.getElementById("edit-brand");
+      select.innerHTML = '<option value="">-- Select a brand --</option>';
+      
+      const brands = document.querySelectorAll(".tranding-slide");
+      brands.forEach((brand, index) => {
+        if (brand.style.display !== "none") {
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = brand.querySelector("img").alt;
+          select.appendChild(option);
+        }
+      });
+    }
+
+    function updateBrand() {
+      const select = document.getElementById("edit-brand");
+      const index = select.value;
+      if (!index) return;
+
+      const name = document.getElementById("edit-brand-name").value;
+      const imageUrl = document.getElementById("edit-brand-image").value;
+      const description = document.getElementById("edit-brand-description").value;
+
+      const brandSlide = document.querySelectorAll(".tranding-slide")[index];
+      const oldBrandId = brandSlide.getAttribute('data-brand');
+      
+      // Update the slide
+      brandSlide.setAttribute('data-brand', name.toLowerCase().replace(/\s+/g, '-'));
+      brandSlide.innerHTML = `
+        <div class="tranding-slide-img">
+          <a href="#" onclick="showBrandInfo('${name.toLowerCase().replace(/\s+/g, '-')}')">
+            <img src="${imageUrl}" alt="${name}">
+          </a>
+        </div>
+      `;
+      
+      // Update brand data
+      if (brandData[oldBrandId]) {
+        brandData[name.toLowerCase().replace(/\s+/g, '-')] = {
+          name: name,
+          image: imageUrl,
+          description: description,
+          products: brandData[oldBrandId].products || []
+        };
+        delete brandData[oldBrandId];
+      }
+
+      closeModal("edit-modal");
+    }
+
+    function deleteBrand() {
+      const select = document.getElementById("edit-brand");
+      const index = select.value;
+      if (!index) return;
+
+      if (confirm("Are you sure you want to delete this brand?")) {
+        const brandSlide = document.querySelectorAll(".tranding-slide")[index];
+        const brandId = brandSlide.getAttribute('data-brand');
+        
+        // Remove from DOM
+        brandSlide.remove();
+        
+        // Remove from brand data
+        delete brandData[brandId];
+        
+        closeModal("edit-modal");
+        swiper.update();
+      }
+    }
+
+    // Load brand data when edit brand is selected
+    document.getElementById("edit-brand").addEventListener("change", function(e) {
+      const index = e.target.value;
+      if (!index) return;
+
+      const brandSlide = document.querySelectorAll(".tranding-slide")[index];
+      const img = brandSlide.querySelector("img");
+      const brandId = brandSlide.getAttribute('data-brand');
+
+      document.getElementById("edit-brand-name").value = img.alt;
+      document.getElementById("edit-brand-image").value = img.src;
+      document.getElementById("edit-brand-description").value = brandData[brandId]?.description || "";
+    });
+
+    // Brand data storage
+    const brandData = {
+      'nwow': {
+        name: 'NWOW Philippines',
+        image: '{% static "images/nwow.png" %}',
+        description: 'NWOW International is a company specializes in manufacturing electric bicycle with high-quality parts for continuous innovation and development operation of state of the art electric bicycle distributors. Founded in 2017 in Carmona, Cavite through the passion, motivation and perseverance of its director, Mr. Kang Ding Wu. Our products are originated from China in which its main factory is located and assembled here in the Philippines. We supply to more than 19 dealers with almost 150+ stores namely NWOW Marketing, TAILG, YADEA, Kingbon, Ehero Marketing, Vitong, CHKK, Daterose, Gamma, X.D.A.O, XDAO, KCINO, T10 Electric Bike, RH Marketing , D.C.Y, Haoture, EMC-2, WSP, & GC10. Now we also have our international branch located in Sri Lanka and France. Chinese manufacturer always have the urge and passion to design a new process of mechanism, innovation, and concern for the environment. In this aspect, they started designing and creating automotive that are not only beneficial for the motorists but also cares for the nature, and most importantly the safety of the user. We aspire to become the new era of the electric bicycle industry.',
+        products: [
+          {
+            name: 'NWOW V15',
+            type: 'twowheels',
+            image: '{% static "images/V15.jpg" %}',
+            price: '₱60,000'
+          },
+          {
+            name: 'NWOW ERV',
+            type: 'threewheels',
+            image: '{% static "images/erv.jpg" %}',
+            price: '₱36,000'
+          },
+          {
+            name: 'NWOW TK10',
+            type: 'twowheels',
+            image: '{% static "images/TK10.jpg" %}',
+            price: '₱38,800'
+          },
+          {
+            name: 'NWOW EMC-GOLF',
+            type: 'fourwheels',
+            image: '{% static "images/emc_golf.jpg" %}',
+            price: '₱88,800'
+          },
+          {
+            name: 'NWOW ARS',
+            type: 'twowheels',
+            image: '{% static "images/ars.jpg" %}',
+            price: '₱34,000'
+          },
+          {
+            name: 'NWOW ERS2',
+            type: 'threewheels',
+            image: '{% static "images/ervs2.jpg" %}',
+            price: '₱66,800'
+          },
+          {
+            name: 'NWOW EMC-GOLF2',
+            type: 'fourwheels',
+            image: '{% static "images/ec_golf2.jpg" %}',
+            price: '₱128,000'
+          },
+          {
+            name: 'NWOW EP-2',
+            type: 'threewheels',
+            image: '{% static "images/ep_2.jpg" %}',
+            price: '₱38,800'
+          },
+          {
+            name: 'NWOW NCT-D1200',
+            type: 'threewheels',
+            image: '{% static "images/nct_d1200.png" %}',
+            price: '₱149,800'
+          }
+        ]
+      },
+      'hatasu': {
+        name: 'Hatasu',
+        image: '{% static "images/hatasu.jpg" %}',
+        description: 'Hatasu is a leading brand in the electric bike industry, known for its innovative designs and reliable performance. With a focus on sustainability and cutting-edge technology, Hatasu offers a range of e-bikes suitable for urban commuting and recreational use.',
+        products: [
+          {
+            name: 'Hatasu Haru',
+            type: 'twowheels',
+            image: '{% static "images/hatasu_haru.jpg" %}',
+            price: '₱45,000'
+          },
+          {
+            name: 'Hatasu Hero',
+            type: 'twowheels',
+            image: '{% static "images/hatasu_hero.jpg" %}',
+            price: '₱52,000'
+          }
+        ]
+      },
+      'kenwei': {
+        name: 'Kenwei',
+        image: '{% static "images/kenwei.png" %}',
+        description: 'Kenwei specializes in high-performance electric bikes with powerful motors and long-lasting batteries. Their products are designed for both daily commuting and adventurous off-road experiences.',
+        products: [
+          {
+            name: 'Kenwei Etona',
+            type: 'twowheels',
+            image: '{% static "images/Kenwei.jpg" %}',
+            price: '₱48,000'
+          }
+        ]
+      },
+      'kuromake': {
+        name: 'Kuromake',
+        image: '{% static "images/kuromake.jpg" %}',
+        description: 'Kuromake offers stylish and affordable electric bikes with a focus on urban mobility. Their designs combine functionality with aesthetic appeal.',
+        products: [
+          {
+            name: 'Kuromake Urban',
+            type: 'threewheels',
+            image: '{% static "images/kuromake_ebike.jpeg" %}',
+            price: '₱42,000'
+          }
+        ]
+      },
+      'johnson': {
+        name: 'Johnson',
+        image: '{% static "images/johnson.jpg" %}',
+        description: 'Johnson Electric Bikes are known for their durability and reliability. They offer a range of models suitable for different terrains and uses.',
+        products: [
+          {
+            name: 'Johnson Trailblazer',
+            type: 'Fourwheels',
+            image: '{% static "images/johnson_angel.jpg" %}',
+            price: '₱55,000'
+          }
+        ]
+      },
+      'redstar': {
+        name: 'Redstar',
+        image: '{% static "images/redstar.png" %}',
+        description: 'Redstar focuses on high-speed electric bikes with sporty designs. Their models are popular among enthusiasts looking for performance.',
+        products: [
+          {
+            name: 'Redstar Racer',
+            type: 'threewheels',
+            image: '{% static "images/red_star.jpeg" %}',
+            price: '₱65,000'
+          }
+        ]
+      },
+      'surron': {
+        name: 'Surron',
+        image: '{% static "images/surron.png" %}',
+        description: 'Surron specializes in lightweight, high-performance electric dirt bikes. Their models are popular for off-road adventures and racing.',
+        products: [
+          {
+            name: 'Surron Light Bee',
+            type: 'twowheels',
+            image: '{% static "images/surron_ebike.jpg" %}',
+            price: '₱120,000'
+          }
+        ]
+      }
+    };
+
+    // Show brand info when a brand is clicked
+    function showBrandInfo(brandId) {
+      const brand = brandData[brandId];
+      if (!brand) return;
+
+      // Hide brands showcase and show brand info
+      document.getElementById('tranding').style.display = 'none';
+      document.getElementById('search-container').style.display = 'none';
+      document.getElementById('admin-controls').style.display = 'none';
+      document.getElementById('brandinfo').style.display = 'block';
+      document.getElementById('product').style.display = 'block';
+      document.getElementById('back-btn').style.display = 'block';
+
+      // Populate brand info
+      const brandInfoContent = document.getElementById('brandinfo-content');
+      brandInfoContent.innerHTML = `
+        <img src="${brand.image}" alt="${brand.name}" class="brandinfo-logo" />
+        <h3 class="brandinfo-subheading">${brand.name}</h3>
+        <p class="brandinfo-text">${brand.description}</p>
+      `;
+
+      // Populate products
+      const productContainer = document.getElementById('product-filter-items');
+      productContainer.innerHTML = '';
+      
+      brand.products.forEach(product => {
+        const productElement = document.createElement('div');
+        productElement.className = `mix ${product.type}`;
+        productElement.innerHTML = `
+          <div class="item-top">
+            <img src="${product.image}" alt="${product.name}" />
+          </div>
+          <div class="item-bottom">
+            <h1 class="item-heading">${product.name}</h1>
+            <h3 class="item-subheading">${product.type.replace('wheels', '-Wheels')}</h3>
+            <div class="price-container">
+              <h3 class="price">${product.price}</h3>
+              <a href="#!" class="btn-cart">
+                <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+              </a>
+            </div>
+          </div>
+        `;
+        productContainer.appendChild(productElement);
+      });
+
+      // Initialize MixItUp if not already initialized
+      if (!mixer) {
+        mixer = mixitup('.product-filter-items', {
+          selectors: {
+            target: '.mix'
+          },
+          animation: {
+            duration: 300
+          }
+        });
+      } else {
+        mixer.filter('all');
+      }
+    }
+
+    // Show brands showcase (main view)
+    function showBrandsShowcase() {
+      document.getElementById('tranding').style.display = 'block';
+      document.getElementById('search-container').style.display = 'flex';
+      document.getElementById('brandinfo').style.display = 'none';
+      document.getElementById('product').style.display = 'none';
+      document.getElementById('back-btn').style.display = 'none';
+      document.getElementById('admin-controls').style.display = isLoggedIn ? 'flex' : 'none';
+      
+      // Reset search
+      document.getElementById('search-input').value = '';
+      const brands = document.querySelectorAll('.tranding-slide');
+      brands.forEach(brand => {
+        brand.style.display = 'flex';
+      });
+      document.getElementById('no-results').style.display = 'none';
+    }
+
+    // Initialize page to show brands showcase
+    showBrandsShowcase();
+  </script>
+</body>
+</html>

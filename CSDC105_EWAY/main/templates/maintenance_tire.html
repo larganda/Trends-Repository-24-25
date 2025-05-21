@@ -1,0 +1,329 @@
+  {% load static %}
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tire Maintenance Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      body {
+        background-color: #ffffff;
+        color: #113c23;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(to right, #e7beb5, #c5efea);
+      }
+
+      .Tire-topbar {
+        background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .Tire-guide {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 2rem auto;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .back-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .back-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      .back-button-image {
+        width: 30px;
+        height: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .back-button:hover .back-button-image {
+        transform: translateX(-3px);
+      }
+
+      .Tire-topbar h4 {
+        margin-left: 10px;
+        flex-grow: 1;
+        text-align: right;
+      }
+
+      .guide-box {
+        background-color: #ffffff;
+        border-radius: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 2rem;
+        gap: 2rem;
+        align-items: flex-start;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .guide-box:hover {
+        transform: translateY(-5px);
+      }
+
+      .guide-content {
+        flex: 2;
+        min-width: 300px;
+      }
+
+      .intro-text {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: #065f46;
+        font-weight: 500;
+        position: relative;
+        padding-left: 1rem;
+      }
+
+      .intro-text::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        border-radius: 2px;
+      }
+
+      .guide-content h2 {
+        margin-top: 1.5rem;
+        color: #065f46;
+        font-size: 1.8rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .guide-content h2::after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        transition: width 0.3s;
+        border-radius: 3px;
+      }
+
+      .guide-content h2:hover {
+        color: #10b981;
+      }
+
+      .guide-content h2:hover::after {
+        width: 100px;
+      }
+
+      .guide-content ul {
+        padding-left: 1.5rem;
+        font-size: 1rem;
+      }
+
+      .guide-content li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+        position: relative;
+        padding-left: 0.5rem;
+        transition: all 0.3s ease;
+        list-style-type: none;
+      }
+
+      .guide-content li:hover {
+        transform: translateX(5px);
+        color: #065f46;
+      }
+
+      .guide-content li::before {
+        content: '';
+        position: absolute;
+        left: -1.5rem;
+        top: 0.6rem;
+        width: 8px;
+        height: 8px;
+        background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .guide-content li:hover::before {
+        transform: scale(1.5);
+      }
+
+      .guide-image {
+        flex: 1;
+        min-width: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.5s ease;
+      }
+
+      .guide-image:hover {
+        transform: scale(1.03);
+      }
+
+      .guide-image img {
+        max-width: 200px;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+      }
+
+      .guide-image img:hover {
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        transform: rotate(-2deg) scale(1.05);
+      }
+
+      @media (max-width: 768px) {
+        .Tire-topbar h4 {
+          font-size: 1.2rem;
+        }
+
+        .guide-box {
+          flex-direction: column;
+          padding: 1.5rem;
+        }
+
+        .guide-content h2 {
+          font-size: 1.5rem;
+        }
+
+        .intro-text {
+          font-size: 1rem;
+        }
+        
+        .Tire-guide {
+          padding: 1rem;
+          margin: 1rem auto;
+        }
+        
+        .guide-image {
+          margin-top: 1rem;
+          justify-content: flex-start;
+        }
+        
+        .guide-image img {
+          max-width: 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="Tire-topbar">
+      <button class="back-button" onclick="history.back()">
+        <img src="{% static 'images/back.png' %}" alt="Back" class="back-button-image">
+      </button>
+      <h4>Tire Maintenance Guide</h4>
+    </header>
+
+    <main class="Tire-guide">
+      <section class="guide-box">
+        <div class="guide-content">
+          <p class="intro-text">
+            Maintaining your tires is essential for safety and performance. Here's how to keep them in good condition:
+          </p>
+
+          <h2>Tire Pressure:</h2>
+          <ul>
+            <li>Check regularly: Use a tire gauge to check the pressure before each ride.</li>
+            <li>Recommended PSI: Inflate the tires to the PSI recommended on the tire sidewall (usually between 30-60 PSI depending on the tire type).</li>
+            <li>Avoid under/over-inflation: Low pressure can cause flats, and high pressure can lead to poor grip and an uncomfortable ride.</li>
+          </ul>
+
+          <h2>Tire Inspection:</h2>
+          <ul>
+            <li>Check for wear and tear: Inspect for cuts, punctures, or excessive wear on the tread. Replace tires when the tread is low (usually below 1.5 mm).</li>
+            <li>Inspect sidewalls: Look for cracks or bulges, as they indicate potential safety issues.</li>
+          </ul>
+
+          <h2>Cleaning and Protection:</h2>
+          <ul>
+            <li>Clean tires: Wash off dirt and debris with mild soap and a soft brush.</li>
+            <li>Consider puncture protection: Use puncture-resistant tires or tire liners to prevent flats, and apply sealant for added protection.</li>
+          </ul>
+        </div>
+        <div class="guide-image">
+          <img src="{% static 'images/tire.png' %}" alt="Tire Maintenance Illustration">
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Adding animations on load
+      document.addEventListener('DOMContentLoaded', function() {
+        const guideBox = document.querySelector('.guide-box');
+        const guideItems = document.querySelectorAll('.guide-content h2, .guide-content li');
+        
+        // Initial state for animations
+        guideBox.style.opacity = '0';
+        guideBox.style.transform = 'translateY(20px)';
+        
+        // Animate the guide box
+        setTimeout(() => {
+          guideBox.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          guideBox.style.opacity = '1';
+          guideBox.style.transform = 'translateY(0)';
+        }, 100);
+        
+        // Animate content with staggered delay
+        guideItems.forEach((item, index) => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(10px)';
+          
+          setTimeout(() => {
+            item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          }, 300 + (index * 50));
+        });
+        
+        // Enhance hover effects for guide image
+        const guideImg = document.querySelector('.guide-image img');
+        guideImg.addEventListener('mouseenter', () => {
+          guideImg.style.transform = 'rotate(-2deg) scale(1.05)';
+        });
+        guideImg.addEventListener('mouseleave', () => {
+          guideImg.style.transform = 'rotate(0) scale(1)';
+        });
+      });
+    </script>
+  </body>
+  </html>

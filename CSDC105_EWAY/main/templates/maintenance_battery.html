@@ -1,0 +1,322 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battery Maintenance Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #113c23;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+    }
+
+    .battery-topbar {
+      background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .battery-guide {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .back-button-image {
+      width: 30px; 
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .back-button:hover .back-button-image {
+      transform: translateX(-3px);
+    }
+
+    .battery-topbar h4 {
+      margin-left: 10px; 
+      flex-grow: 1;
+      text-align: right;
+    }
+
+    .guide-box {
+      background-color: #ffffff;
+      border-radius: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 2rem;
+      gap: 2rem;
+      align-items: flex-start;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .guide-content {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .intro-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #065f46;
+      font-weight: 500;
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .intro-text::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      border-radius: 2px;
+    }
+
+    .guide-content h2 {
+      font-family: 'Poppins', sans-serif;
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: #065f46;
+      font-size: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .guide-content h2::after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      transition: width 0.3s;
+      border-radius: 3px;
+    }
+
+    .guide-content h2:hover {
+      color: #10b981;
+    }
+
+    .guide-content h2:hover::after {
+      width: 100px;
+    }
+
+    .guide-content ul {
+      padding-left: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .guide-content li {
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+      position: relative;
+      padding-left: 0.5rem;
+      transition: all 0.3s ease;
+      list-style-type: none;
+    }
+
+    .guide-content li:hover {
+      transform: translateX(5px);
+      color: #065f46;
+    }
+
+    .guide-content li::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 0.6rem;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .guide-content li:hover::before {
+      transform: scale(1.5);
+    }
+
+    .guide-image {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s ease;
+    }
+
+    .guide-image:hover {
+      transform: scale(1.03);
+    }
+
+    .guide-image img {
+      max-width: 200px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .guide-image img:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transform: rotate(-2deg);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .battery-topbar h4 {
+        font-size: 1.2rem;
+      }
+
+      .guide-box {
+        flex-direction: column;
+        padding: 1.5rem;
+      }
+
+      .guide-content h2 {
+        font-size: 1.3rem;
+      }
+
+      .intro-text {
+        font-size: 1rem;
+      }
+      
+      .guide-image {
+        margin-top: 1rem;
+        justify-content: flex-start;
+      }
+      
+      .guide-image img {
+        max-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="battery-topbar">
+    <button class="back-button" onclick="history.back()">
+      <img src="{% static 'images/back.png' %}" alt="Back" class="back-button-image">
+    </button>
+    <h4>Battery Maintenance Guide</h4>
+  </header>
+
+  <main class="battery-guide">
+    <section class="guide-box">
+      <div class="guide-content">
+        <p class="intro-text">
+          Proper battery care is crucial for ensuring your e-bike operates efficiently and for prolonging its lifespan.
+        </p>
+
+        <h2>Charging Tips:</h2>
+        <ul>
+          <li>Charge after each ride: Always recharge your battery after a ride, even if you haven't used all the battery power.</li>
+          <li>Avoid overcharging: Don't leave your battery plugged in for extended periods once it's fully charged.</li>
+          <li>Charge in a cool, dry place: Avoid extreme temperatures while charging (either too hot or too cold).</li>
+        </ul>
+
+        <h2>Storage Tips:</h2>
+        <ul>
+          <li>Store partially charged: If you're not using your bike for a while, store the battery at 50–70% charge.</li>
+          <li>Cool, dry storage: Store the battery in a cool, dry location to prevent damage.</li>
+        </ul>
+
+        <h2>Battery Health:</h2>
+        <ul>
+          <li>Regularly check the battery: Ensure the battery is securely mounted, clean, and shows no signs of wear or corrosion.</li>
+          <li>Monitor performance: If the battery life is significantly reduced, it may need to be replaced.</li>
+        </ul>
+      </div>
+      <div class="guide-image">
+        <img src="{% static 'images/battery_maintenance.png' %}" alt="Battery Maintenance Illustration">
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Add animation to elements on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+      const guideBox = document.querySelector('.guide-box');
+      const guideItems = document.querySelectorAll('.guide-content h2, .guide-content li');
+      
+      // Initial state for animations
+      guideBox.style.opacity = '0';
+      guideBox.style.transform = 'translateY(20px)';
+      
+      // Animate the guide box
+      setTimeout(() => {
+        guideBox.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        guideBox.style.opacity = '1';
+        guideBox.style.transform = 'translateY(0)';
+      }, 100);
+      
+      // Animate list items with staggered delay
+      guideItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-10px)';
+        
+        setTimeout(() => {
+          item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          item.style.opacity = '1';
+          item.style.transform = 'translateX(0)';
+        }, 300 + (index * 50));
+      });
+      
+      // Add hover effect to back button
+      const backButton = document.querySelector('.back-button');
+      backButton.addEventListener('mouseenter', () => {
+        backButton.style.transform = 'translateX(-3px)';
+      });
+      backButton.addEventListener('mouseleave', () => {
+        backButton.style.transform = 'translateX(0)';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #113c23;
+      line-height: 1.6;
+      min-height: 100vh;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 60px;
+      background: linear-gradient(to right, #e7beb5, #c5efea);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #4C9444;
+      transition: width 0.3s;
+    }
+
+    nav a:hover {
+      color: #4C9444;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .user-profile {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .user-profile img:hover {
+      transform: scale(1.05);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      min-width: 150px;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-menu a {
+      padding: 12px 16px;
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f0f0f0;
+      color: #4C9444;
+    }
+
+    .hero {
+      background-color: #f8fafc;
+      padding: 4rem 2rem;
+      text-align: center;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #005c2e;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #444;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      background-size: 200% auto;
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 30px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    /* Form Sections */
+    .form-section, .search-section {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 20px;
+      margin: 2rem auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 800px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .form-title, .search-title {
+      color: #005c2e;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #2a593d;
+    }
+
+    .input-field {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      padding: 0.75rem 1rem;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .section-title {
+      color: #005c2e;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 1.3rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e0e0e0;
+      grid-column: span 2;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      background-size: 200% auto;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 1.5rem auto 0;
+      width: auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* View Details Section */
+    .details-card {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 1rem;
+    }
+
+    .details-title-container {
+      flex: 1;
+      text-align: center;
+    }
+
+    .details-title {
+      color: #005c2e;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .details-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .detail-item {
+      margin-bottom: 1rem;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #2a593d;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .detail-value {
+      padding: 0.75rem;
+      background-color: #f8f8f8;
+      border-radius: 30px;
+      word-break: break-word;
+      transition: all 0.3s ease;
+    }
+
+    /* Edit Functionality Styles */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+    
+    .edit-btn, .save-btn, .cancel-btn, .delete-btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .edit-btn {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      color: white;
+    }
+    
+    .edit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .save-btn {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      color: white;
+      display: none;
+    }
+    
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .cancel-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+      color: white;
+      display: none;
+    }
+    
+    .cancel-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .delete-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .edit-mode .detail-value {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 0.3rem;
+    }
+    
+    .edit-mode input, .edit-mode textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      font-family: inherit;
+    }
+    
+    .edit-mode textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Confirmation Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .modal-title {
+      margin: 0;
+      color: #093820;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #777;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: #333;
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .modal-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .modal-btn-confirm {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .modal-btn-cancel {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      color: white;
+    }
+
+    /* Error styles */
+    .error-message {
+      color: #ef4444;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .error-input {
+      border-color: #ef4444 !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .form-grid, .details-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .full-width {
+        grid-column: span 1;
+      }
+
+      .details-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .details-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .action-buttons {
+        flex-wrap: wrap;
+      }
+
+      .form-section, .search-section {
+        padding: 1.5rem;
+        margin: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+       <a href="{% url 'home_page_with_account' %}">Home</a>
+       <a href="{% url 'showcase_with_account' %}">Showcase</a>
+       <a href="{%url 'registration' %}">Registration</a>
+       <a href="{% url 'regulations' %}">Regulations</a>
+       <a href="{%url 'maintenance_main' %}">Maintenance</a>
+    </nav>
+
+    <!-- User profile dropdown -->
+    <div class="user-profile">
+      <img src="{% static 'images/user_logo.png' %}" alt="User Profile" onclick="toggleDropdown()" />
+      <div id="dropdown-menu" class="dropdown-menu">
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'homepage' %}">Logout</a>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>Ride Smarter,<br>Ride Safer.</h1>
+    <a href="#registration" class="cta-button">Get Started</a>
+  </div>
+
+  <main>
+    <!-- Registration Form Section -->
+    <section id="registration" class="form-section">
+      <h2 class="form-title">Register Your E-Bike</h2>
+      
+        <form method="POST" novalidate>
+          {% csrf_token %}
+
+        <div class="form-grid">
+          <!-- Personal Information -->
+          <h3 class="section-title">Personal Information</h3>
+          
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="input-field" required pattern="[A-Za-z ]+" title="Only letters and spaces are allowed">
+            <div class="error-message" id="nameError">Please enter a valid name (letters and spaces only)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" class="input-field" required>
+            <div class="error-message" id="emailError">Please enter a valid email address</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" class="input-field" required pattern="[0-9]{11}" title="Please enter a valid 11-digit phone number">
+            <div class="error-message" id="phoneError">Please enter a valid 11-digit phone number</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="address">Complete Address</label>
+            <input type="text" id="address" class="input-field" required minlength="10">
+            <div class="error-message" id="addressError">Please enter a complete address (at least 10 characters)</div>
+          </div>
+
+          <!-- E-Bike Information -->
+          <h3 class="section-title">E-Bike Information</h3>
+          
+          <div class="form-group">
+            <label for="ebikeBrand">Brand</label>
+            <input type="text" id="ebikeBrand" class="input-field" required>
+            <div class="error-message" id="brandError">Please enter the e-bike brand</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="ebikeModel">Model</label>
+            <input type="text" id="ebikeModel" class="input-field" required>
+            <div class="error-message" id="modelError">Please enter the e-bike model</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="ebikeColor">Color</label>
+            <input type="text" id="ebikeColor" class="input-field" required pattern="[A-Za-z ]+" title="Only letters and spaces are allowed">
+            <div class="error-message" id="colorError">Please enter a valid color (letters only)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="serialNumber">Serial Number</label>
+            <input type="text" id="serialNumber" class="input-field" required pattern="[A-Za-z0-9-]+" title="Only letters, numbers, and hyphens are allowed">
+            <div class="error-message" id="serialError">Please enter a valid serial number</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="purchaseDate">Purchase Date</label>
+            <input type="date" id="purchaseDate" class="input-field" required max="">
+            <div class="error-message" id="dateError">Please select a valid purchase date</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="receiptNumber">Receipt Number</label>
+            <input type="text" id="receiptNumber" class="input-field" required pattern="[A-Za-z0-9-]+" title="Only letters, numbers, and hyphens are allowed">
+            <div class="error-message" id="receiptError">Please enter a valid receipt number</div>
+          </div>
+
+          <!-- Additional Information -->
+          <h3 class="section-title">Additional Information</h3>
+          
+          <div class="form-group full-width">
+            <label for="additionalNotes">Special Notes (Optional)</label>
+            <textarea id="additionalNotes" class="input-field" rows="3"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Registration</button>
+      </form>
+    </section>
+
+    <!-- Search & View Section -->
+    <section class="search-section">
+      <h2 class="search-title">View Your Registration</h2>
+      <div class="search-container">
+        <div class="form-group">
+          <label for="searchInput">Enter Registration ID or Serial Number</label>
+          <input type="text" id="searchInput" class="input-field" placeholder="REG-12345 or EBK-SERIAL-001">
+        </div>
+        <button id="searchBtn" class="submit-btn">Search Registration</button>
+      </div>
+
+      <!-- Results will appear here -->
+      <div id="registrationDetails" class="details-card">
+        <div class="details-header">
+          <div class="details-actions">
+            <a href="{% url 'registration' %}" class="back-btn">Back</a>
+          </div>
+          <div class="details-title-container">
+            <h3 class="details-title">E-Bike Registration Details</h3>
+          </div>
+          <div class="details-actions">
+            <button class="print-btn" onclick="window.print()">Print Details</button>
+          </div>
+        </div>
+        <div class="details-grid" id="detailsContent">
+          <!-- Details will be populated here by JavaScript -->
+        </div>
+        <div class="action-buttons">
+          <button class="edit-btn" onclick="enableEditMode()">Edit Details</button>
+          <button class="save-btn" onclick="saveChanges()">Save Changes</button>
+          <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+          <button class="delete-btn" onclick="showDeleteConfirmation()">Delete Registration</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Deletion</h3>
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this registration? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn modal-btn-confirm" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'ebikeRegistrations';
+    let currentEditingId = null;
+    let originalData = null;
+    let registrations = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    
+    function toggleDropdown() {
+      const menu = document.getElementById("dropdown-menu");
+      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+    }
+
+    // Close dropdown if clicked outside
+    window.addEventListener("click", function (e) {
+      const dropdown = document.getElementById("dropdown-menu");
+      const profile = document.querySelector(".user-profile img");
+      if (!e.target.closest('.user-profile')) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    // Set max date for purchase date to today
+    window.addEventListener('DOMContentLoaded', function() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('purchaseDate').max = today;
+      
+      // Add input validation
+      setupFormValidation();
+    });
+
+    // Setup form validation
+    function setupFormValidation() {
+      const form = document.getElementById('registrationForm');
+      const inputs = form.querySelectorAll('input[required], textarea[required]');
+      
+      inputs.forEach(input => {
+        input.addEventListener('input', function() {
+          validateField(this);
+        });
+        
+        input.addEventListener('blur', function() {
+          validateField(this);
+        });
+      });
+    }
+    
+    // Validate individual field
+    function validateField(field) {
+      const errorElement = document.getElementById(field.id + 'Error');
+      
+      if (field.validity.valid) {
+        field.classList.remove('error-input');
+        if (errorElement) errorElement.style.display = 'none';
+      } else {
+        field.classList.add('error-input');
+        if (errorElement) errorElement.style.display = 'block';
+      }
+    }
+    
+    // Validate entire form
+    function validateForm() {
+      let isValid = true;
+      const form = document.getElementById('registrationForm');
+      const inputs = form.querySelectorAll('input[required], textarea[required]');
+      
+      inputs.forEach(input => {
+        validateField(input);
+        if (!input.validity.valid) {
+          isValid = false;
+        }
+      });
+      
+      return isValid;
+    }
+
+    // Form submission
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!validateForm()) {
+        alert('Please correct the errors in the form before submitting.');
+        return;
+      }
+      
+      // Generate registration ID
+      const regId = 'REG-' + Math.floor(10000 + Math.random() * 90000);
+      const date = new Date();
+      const regDate = date.toISOString().split('T')[0];
+      const expiryDate = new Date(date.setFullYear(date.getFullYear() + 1)).toISOString().split('T')[0];
+      
+      // Create registration object
+      const registration = {
+        id: regId,
+        name: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        ebikeBrand: document.getElementById('ebikeBrand').value.trim(),
+        ebikeModel: document.getElementById('ebikeModel').value.trim(),
+        ebikeColor: document.getElementById('ebikeColor').value.trim(),
+        serialNumber: document.getElementById('serialNumber').value.trim(),
+        purchaseDate: document.getElementById('purchaseDate').value,
+        receiptNumber: document.getElementById('receiptNumber').value.trim(),
+        notes: document.getElementById('additionalNotes').value.trim(),
+        registrationDate: regDate,
+        expiryDate: expiryDate,
+        status: "Active"
+      };
+
+      // Add to storage
+      registrations.push(registration);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
+      
+      // Show success message
+      alert(`Registration successful! Your Registration ID is: ${regId}\nPlease save this ID for future reference.`);
+      
+      // Reset form
+      this.reset();
+    });
+
+    // Search functionality
+    document.getElementById('searchBtn').addEventListener('click', function() {
+      const searchTerm = document.getElementById('searchInput').value.trim();
+      const detailsCard = document.getElementById('registrationDetails');
+      const detailsContent = document.getElementById('detailsContent');
+      
+      if (!searchTerm) {
+        alert('Please enter a registration ID or serial number');
+        return;
+      }
+      
+      // Search in registrations
+      const foundRegistration = registrations.find(reg => 
+        reg.id === searchTerm || reg.serialNumber === searchTerm
+      );
+      
+      if (foundRegistration) {
+        displayRegistrationDetails(foundRegistration);
+        detailsCard.style.display = 'block';
+      } else {
+        alert('No registration found with that ID or serial number');
+        detailsCard.style.display = 'none';
+      }
+    });
+
+    function displayRegistrationDetails(registration) {
+      const detailsContent = document.getElementById('detailsContent');
+      
+      detailsContent.innerHTML = `
+        <div class="detail-item">
+          <span class="detail-label">Registration ID:</span>
+          <div class="detail-value">${registration.id}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Status:</span>
+          <div class="detail-value">${registration.status}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Registration Date:</span>
+          <div class="detail-value">${registration.registrationDate}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Expiry Date:</span>
+          <div class="detail-value">${registration.expiryDate}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Full Name:</span>
+          <div class="detail-value">${registration.name}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Email:</span>
+          <div class="detail-value">${registration.email}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Phone:</span>
+          <div class="detail-value">${registration.phone}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Address:</span>
+          <div class="detail-value">${registration.address}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">E-Bike Brand:</span>
+          <div class="detail-value">${registration.ebikeBrand}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">E-Bike Model:</span>
+          <div class="detail-value">${registration.ebikeModel}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Color:</span>
+          <div class="detail-value">${registration.ebikeColor}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Serial Number:</span>
+          <div class="detail-value">${registration.serialNumber}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Purchase Date:</span>
+          <div class="detail-value">${registration.purchaseDate}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Receipt Number:</span>
+          <div class="detail-value">${registration.receiptNumber}</div>
+        </div>
+        ${registration.notes ? `
+        <div class="detail-item full-width">
+          <span class="detail-label">Additional Notes:</span>
+          <div class="detail-value">${registration.notes}</div>
+        </div>
+        ` : ''}
+      `;
+      
+      // Store current registration being viewed/edited
+      currentEditingId = registration.id;
+      originalData = registration;
+      
+      // Show edit button and hide save/cancel
+      document.querySelector('.edit-btn').style.display = 'block';
+      document.querySelector('.save-btn').style.display = 'none';
+      document.querySelector('.cancel-btn').style.display = 'none';
+      document.querySelector('.delete-btn').style.display = 'block';
+      
+      // Exit edit mode if active
+      document.getElementById('registrationDetails').classList.remove('edit-mode');
+    }
+
+    function enableEditMode() {
+      const detailsCard = document.getElementById('registrationDetails');
+      detailsCard.classList.add('edit-mode');
+      
+      // Convert all detail values to editable fields
+      const detailItems = detailsCard.querySelectorAll('.detail-item');
+      detailItems.forEach(item => {
+        const label = item.querySelector('.detail-label').textContent;
+        const valueElement = item.querySelector('.detail-value');
+        const currentValue = valueElement.textContent;
+        
+        // Skip readonly fields
+        if (label.includes('Registration ID') || 
+            label.includes('Status') || 
+            label.includes('Registration Date') || 
+            label.includes('Expiry Date')) {
+          return;
+        }
+        
+        // Create appropriate input based on field type
+        if (label.includes('Additional Notes')) {
+          valueElement.innerHTML = `<textarea class="input-field">${currentValue}</textarea>`;
+        } else if (label.includes('Purchase Date')) {
+          valueElement.innerHTML = `<input type="date" class="input-field" value="${currentValue}" max="${new Date().toISOString().split('T')[0]}">`;
+        } else if (label.includes('Email')) {
+          valueElement.innerHTML = `<input type="email" class="input-field" value="${currentValue}" required>`;
+        } else if (label.includes('Phone')) {
+          valueElement.innerHTML = `<input type="tel" class="input-field" value="${currentValue}" pattern="[0-9]{11}" required>`;
+        } else if (label.includes('Full Name') || label.includes('Color')) {
+          valueElement.innerHTML = `<input type="text" class="input-field" value="${currentValue}" pattern="[A-Za-z ]+" required>`;
+        } else if (label.includes('Serial Number') || label.includes('Receipt Number')) {
+          valueElement.innerHTML = `<input type="text" class="input-field" value="${currentValue}" pattern="[A-Za-z0-9-]+" required>`;
+        } else {
+          valueElement.innerHTML = `<input type="text" class="input-field" value="${currentValue}" required>`;
+        }
+      });
+      
+      // Show save/cancel buttons and hide edit/delete buttons
+      document.querySelector('.edit-btn').style.display = 'none';
+      document.querySelector('.save-btn').style.display = 'block';
+      document.querySelector('.cancel-btn').style.display = 'block';
+      document.querySelector('.delete-btn').style.display = 'none';
+    }
+
+    function saveChanges() {
+      const detailsCard = document.getElementById('registrationDetails');
+      const userIndex = registrations.findIndex(reg => reg.id === currentEditingId);
+      
+      if (userIndex === -1) {
+        alert('Error: Registration not found');
+        return;
+      }
+      
+      // Validate all fields first
+      let isValid = true;
+      const inputs = detailsCard.querySelectorAll('input, textarea');
+      
+      inputs.forEach(input => {
+        if (input.required && !input.value.trim()) {
+          input.classList.add('error-input');
+          isValid = false;
+        } else if (input.pattern && !new RegExp(input.pattern).test(input.value)) {
+          input.classList.add('error-input');
+          isValid = false;
+        } else {
+          input.classList.remove('error-input');
+        }
+      });
+      
+      if (!isValid) {
+        alert('Please correct the errors in the form before saving.');
+        return;
+      }
+      
+      // Get all updated values
+      const detailItems = detailsCard.querySelectorAll('.detail-item');
+      const updatedRegistration = {...registrations[userIndex]};
+      
+      detailItems.forEach(item => {
+        const label = item.querySelector('.detail-label').textContent;
+        const input = item.querySelector('input, textarea');
+        
+        if (!input) return;
+        
+        // Map labels to properties
+        if (label.includes('Full Name')) updatedRegistration.name = input.value.trim();
+        else if (label.includes('Email')) updatedRegistration.email = input.value.trim();
+        else if (label.includes('Phone')) updatedRegistration.phone = input.value.trim();
+        else if (label.includes('Address')) updatedRegistration.address = input.value.trim();
+        else if (label.includes('E-Bike Brand')) updatedRegistration.ebikeBrand = input.value.trim();
+        else if (label.includes('E-Bike Model')) updatedRegistration.ebikeModel = input.value.trim();
+        else if (label.includes('E-Bike Color')) updatedRegistration.ebikeColor = input.value.trim();
+        else if (label.includes('Serial Number')) updatedRegistration.serialNumber = input.value.trim();
+        else if (label.includes('Purchase Date')) updatedRegistration.purchaseDate = input.value;
+        else if (label.includes('Receipt Number')) updatedRegistration.receiptNumber = input.value.trim();
+        else if (label.includes('Additional Notes')) updatedRegistration.notes = input.value.trim();
+      });
+      
+      // Update the data in storage
+      registrations[userIndex] = updatedRegistration;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
+      
+      // Show success message
+      alert('Registration details updated successfully!');
+      
+      // Exit edit mode and refresh display
+      cancelEdit();
+      displayRegistrationDetails(updatedRegistration);
+    }
+
+    function cancelEdit() {
+      const detailsCard = document.getElementById('registrationDetails');
+      detailsCard.classList.remove('edit-mode');
+      
+      // Restore original display
+      if (originalData) {
+        displayRegistrationDetails(originalData);
+      }
+    }
+
+    // Show delete confirmation modal
+    function showDeleteConfirmation() {
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    // Confirm and execute deletion
+    function confirmDelete() {
+      const userIndex = registrations.findIndex(reg => reg.id === currentEditingId);
+      
+      if (userIndex === -1) {
+        alert('Error: Registration not found');
+        closeModal();
+        return;
+      }
+      
+      // Remove from array
+      registrations.splice(userIndex, 1);
+      
+      // Update localStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
+      
+      // Close modal and hide details card
+      closeModal();
+      document.getElementById('registrationDetails').style.display = 'none';
+      document.getElementById('searchInput').value = '';
+      
+      // Show success message
+      alert('Registration deleted successfully!');
+    }
+  </script>
+</body>
+</html>

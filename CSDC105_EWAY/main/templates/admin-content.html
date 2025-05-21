@@ -1,0 +1,837 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Management - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        :root {
+            --primary-color: #0f5132;
+            --secondary-color: #e9c5c0;
+            --accent-color: #c2410c;
+            --light-bg: #f8f9fa;
+            --dark-text: #1e293b;
+            --light-text: #f8fafc;
+            --border-color: #e2e8f0;
+            --success-color: #16a34a;
+            --warning-color: #eab308;
+            --danger-color: #dc2626;
+            --info-color: #0ea5e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--secondary-color), #f3e8e6);
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 20px;
+        }
+
+        .menu-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            color: var(--dark-text);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .content-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .content-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-right: 15px;
+            background-color: var(--primary-color);
+        }
+
+        .content-card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .content-card-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .content-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0c4128;
+        }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: var(--dark-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+
+        .content-card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background-color: rgba(22, 163, 74, 0.1);
+            color: var(--success-color);
+        }
+
+        /* Recent Updates */
+        .recent-updates {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .update-list {
+            list-style-type: none;
+        }
+
+        .update-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .update-item:last-child {
+            border-bottom: none;
+        }
+
+        .update-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            background-color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .update-content {
+            flex: 1;
+        }
+
+        .update-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .update-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .update-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .update-author {
+            font-weight: 500;
+        }
+
+        /* Editor Section */
+        .editor-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .editor-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .editor-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .form-control {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .toolbar-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background-color: #e2e8f0;
+            color: var(--dark-text);
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 20px;
+            background-color: var(--border-color);
+            margin: 0 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 0;
+            }
+
+            .sidebar-header h2, .menu-label, .menu-item span {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 15px 0;
+            }
+
+            .menu-item i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+            </div>
+            <div class="sidebar-menu">
+                <p class="menu-label">Main</p>
+                <a href="{% url 'admin_dashboard' %}" class="menu-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'admin_registrations' %}" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Registration Requests</span>
+                </a>
+                <a href="{% url 'admin_content' %}" class="menu-item active">
+                    <i class="fas fa-edit"></i>
+                    <span>Content Management</span>
+                </a>
+                <p class="menu-label">System</p>
+                <a href="{% url 'admin_logout' %}" class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Content Management</h1>
+                <div class="user-profile">
+                    <img src="{% static 'images/admin_logo.png' %}" alt="Admin Profile">
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <div class="content-card" onclick="showEditor('homepage')">
+                    <span class="content-card-badge">Updated</span>
+                    <div class="content-card-header">
+                        <div class="content-card-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 class="content-card-title">Homepage</h3>
+                    </div>
+                    <p class="content-card-description">
+                        Edit the main landing page content, hero section, and featured e-bikes.
+                    </p>
+                    <div class="content-card-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="showEditor('showcase')">
+                    <div class="content-card-header">
+                        <div class="content-card-icon" style="background-color: #0ea5e9;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h3 class="content-card-title">Showcase</h3>
+                    </div>
+                    <p class="content-card-description">
+                        Manage the e-bike showcase section, including brands, models, and specifications.
+                    </p>
+                    <div class="content-card-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="showEditor('registration')">
+                    <div class="content-card-header">
+                        <div class="content-card-icon" style="background-color: #eab308;">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3 class="content-card-title">Registration</h3>
+                    </div>
+                    <p class="content-card-description">
+                        Update registration guides, forms, and requirements for e-bike registration.
+                    </p>
+                    <div class="content-card-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="showEditor('regulations')">
+                    <div class="content-card-header">
+                        <div class="content-card-icon" style="background-color: #dc2626;">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="content-card-title">Regulations</h3>
+                    </div>
+                    <p class="content-card-description">
+                        Edit safety guidelines, traffic rules, and regulatory information for e-bike users.
+                    </p>
+                    <div class="content-card-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="showEditor('maintenance')">
+                    <span class="content-card-badge">Updated</span>
+                    <div class="content-card-header">
+                        <div class="content-card-icon" style="background-color: #16a34a;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="content-card-title">Maintenance</h3>
+                    </div>
+                    <p class="content-card-description">
+                        Update maintenance guides, tips, and service information for e-bike owners.
+                    </p>
+                    <div class="content-card-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="showEditor('users')">
+                    <div class="content-card-header">
+                        <div class="content-card-icon" style="background-color: #8b5cf6;">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h3 class="content-card-title">User Accounts</h3>
+                    </div>
+                    <p class="content-card-description">
+                        Manage user profile pages, account settings, and permission levels.
+                    </p>
+                    <div class="content-card-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Updates -->
+            <div class="recent-updates">
+                <div class="section-header">
+                    <h3 class="section-title">Recent Content Updates</h3>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+                <ul class="update-list">
+                    <li class="update-item">
+                        <div class="update-icon" style="background-color: #16a34a;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="update-content">
+                            <h4 class="update-title">Maintenance Guide Updated</h4>
+                            <p class="update-description">Added new section on battery maintenance and troubleshooting tips.</p>
+                            <div class="update-meta">
+                                <span class="update-time">Today, 10:45 AM</span>
+                                <span class="update-author">by Admin User</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="update-item">
+                        <div class="update-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="update-content">
+                            <h4 class="update-title">Homepage Hero Section Updated</h4>
+                            <p class="update-description">Changed hero image and updated the main tagline to "Ride Smarter, Ride Safer."</p>
+                            <div class="update-meta">
+                                <span class="update-time">Yesterday, 3:20 PM</span>
+                                <span class="update-author">by Admin User</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="update-item">
+                        <div class="update-icon" style="background-color: #0ea5e9;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="update-content">
+                            <h4 class="update-title">New Brand Added to Showcase</h4>
+                            <p class="update-description">Added NWOW brand with 3 new e-bike models to the showcase section.</p>
+                            <div class="update-meta">
+                                <span class="update-time">May 7, 2025, 11:15 AM</span>
+                                <span class="update-author">by Content Editor</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="update-item">
+                        <div class="update-icon" style="background-color: #dc2626;">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="update-content">
+                            <h4 class="update-title">Regulations Page Updated</h4>
+                            <p class="update-description">Updated safety guidelines to include new Administrative Order 2021-039.</p>
+                            <div class="update-meta">
+                                <span class="update-time">May 5, 2025, 9:30 AM</span>
+                                <span class="update-author">by Legal Advisor</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Content Editor Section (Hidden by default, shown when a content card is clicked) -->
+            <div id="editorSection" class="editor-section">
+                <div class="editor-header">
+                    <h3 id="editorTitle" class="editor-title">Edit Content</h3>
+                    <div class="editor-actions">
+                        <button class="btn btn-secondary" onclick="cancelEdit()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button class="btn btn-primary" onclick="saveContent()">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+                <form class="editor-form">
+                    <div class="form-group">
+                        <label for="contentTitle">Title</label>
+                        <input type="text" id="contentTitle" class="form-control" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="contentDescription">Description</label>
+                        <input type="text" id="contentDescription" class="form-control" placeholder="Enter short description">
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn"><i class="fas fa-bold"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-italic"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-underline"></i></button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-heading"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-list-ul"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-list-ol"></i></button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-link"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-image"></i></button>
+                            <div class="toolbar-separator"></div>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-align-left"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-align-center"></i></button>
+                            <button type="button" class="toolbar-btn"><i class="fas fa-align-right"></i></button>
+                        </div>
+                        <textarea id="contentBody" class="form-control" placeholder="Enter content here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="contentStatus">Status</label>
+                        <select id="contentStatus" class="form-control">
+                            <option value="published">Published</option>
+                            <option value="draft">Draft</option>
+                            <option value="scheduled">Scheduled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contentImage">Featured Image</label>
+                        <input type="file" id="contentImage" class="form-control">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle sidebar on mobile
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+
+        // Content editor functions
+        function showEditor(contentType) {
+            const editorSection = document.getElementById('editorSection');
+            const editorTitle = document.getElementById('editorTitle');
+            const contentTitle = document.getElementById('contentTitle');
+            const contentDescription = document.getElementById('contentDescription');
+            const contentBody = document.getElementById('contentBody');
+            
+            // Show the editor section
+            editorSection.style.display = 'block';
+            
+            // Scroll to the editor section
+            editorSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Set the editor title based on the content type
+            switch(contentType) {
+                case 'homepage':
+                    editorTitle.textContent = 'Edit Homepage Content';
+                    contentTitle.value = 'Ride Smarter, Ride Safer';
+                    contentDescription.value = 'Discover the future of eco-friendly transportation with our premium selection of electric vehicles and comprehensive guides.';
+                    contentBody.value = 'Welcome to our e-bike portal, your one-stop destination for all things related to electric bikes and sustainable transportation. Our mission is to promote eco-friendly mobility solutions that are both practical and enjoyable.';
+                    break;
+                case 'showcase':
+                    editorTitle.textContent = 'Edit Showcase Content';
+                    contentTitle.value = 'E-Bike Showcase';
+                    contentDescription.value = 'Explore our collection of premium e-bikes from top brands.';
+                    contentBody.value = 'Our showcase features the latest and most popular e-bike models from leading manufacturers. Each listing includes detailed specifications, pricing information, and user reviews to help you make an informed decision.';
+                    break;
+                case 'registration':
+                    editorTitle.textContent = 'Edit Registration Content';
+                    contentTitle.value = 'E-Bike Registration Guide';
+                    contentDescription.value = 'A step-by-step process for registering your e-bike.';
+                    contentBody.value = 'This guide provides a step-by-step process for registering your e-bike, including required documents, fees, and important regulations to ensure a hassle-free registration experience.';
+                    break;
+                case 'regulations':
+                    editorTitle.textContent = 'Edit Regulations Content';
+                    contentTitle.value = 'Safety and Traffic Guidelines';
+                    contentDescription.value = 'Important traffic rules and regulations for e-bike users.';
+                    contentBody.value = 'A comprehensive guide to traffic rules and safety regulations that all e-bike users must follow to ensure their safety and the safety of others on the road.';
+                    break;
+                case 'maintenance':
+                    editorTitle.textContent = 'Edit Maintenance Content';
+                    contentTitle.value = 'Maintenance Guide';
+                    contentDescription.value = 'Keep your e-bike in top condition with our maintenance tips.';
+                    contentBody.value = 'Regular maintenance is essential for keeping your e-bike running smoothly and extending its lifespan. This guide covers basic maintenance tasks, troubleshooting tips, and when to seek professional service.';
+                    break;
+                case 'users':
+                    editorTitle.textContent = 'Edit User Account Content';
+                    contentTitle.value = 'User Account Settings';
+                    contentDescription.value = 'Manage user profiles and account settings.';
+                    contentBody.value = 'This section allows users to manage their profile information, update their contact details, and customize their account preferences.';
+                    break;
+                default:
+                    editorTitle.textContent = 'Edit Content';
+                    contentTitle.value = '';
+                    contentDescription.value = '';
+                    contentBody.value = '';
+            }
+        }
+
+        function cancelEdit() {
+            const editorSection = document.getElementById('editorSection');
+            editorSection.style.display = 'none';
+        }
+
+        function saveContent() {
+            alert('Content saved successfully!');
+            
+            // Hide the editor section
+            const editorSection = document.getElementById('editorSection');
+            editorSection.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

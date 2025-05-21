@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Bike Registration Guide | Simple Steps to Register Your E-Bike</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="{% static 'js/script.js' %}"></script>
+
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'home_page_with_account' %}">Home</a>
+       <a href="{% url 'showcase_with_account' %}">Showcase</a>
+       <a href="{%url 'registration' %}">Registration</a>
+       <a href="{% url 'regulations' %}">Regulations</a>
+       <a href="{%url 'maintenance_main' %}">Maintenance</a>
+    </nav>
+  
+    <div class="user-profile">
+      <img src="{% static 'images/user_logo.png' %}" alt="User Profile" onclick="toggleDropdown()" />
+      <div id="dropdown-menu" class="dropdown-menu">
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'homepage' %}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>E-Bike Registration Guide</h1>
+        <p>This guide provides a step-by-step process for registering your e-bike or city hall, including required
+          documents, fees, and important regulations to ensure a hassle-free registration experience.</p>
+        <section class="ebike-registration-form mt-10 p-6 bg-white rounded shadow">
+            <h2 class="text-2xl font-semibold mb-4">Register Your E-Bike</h2>
+            <form method="POST" action="{% url 'user_registration' %}">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <button type="submit">Register</button>
+                </form>
+
+                {% if messages %}
+                  <ul>
+                    {% for message in messages %}
+                      <li>{{ message }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+                {% if messages %}
+                  <div id="django-messages" style="display:none;">
+                    {% for message in messages %}
+                      <p>{{ message|escapejs }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+          </section>
+
+      </div>
+      <img src="{% static 'images/ebike_pic_mandatory.jpg' %}" alt="E-bike registration illustration" class="hero-image">
+    </section>
+
+    <section class="search-section">
+      <h2>Search Your E-Bike Registration</h2>
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Enter registration ID, name, or e-bike serial number">
+        <button class="search-button" onclick="searchUserDetails()">Search</button>
+      </div>
+      <div id="noResults" class="no-results">
+        <p>No registration found matching your search.</p>
+      </div>
+      <div id="userDetails" class="user-details-section"></div>
+    </section>
+
+    <section class="registration-steps">
+      <div class="card">
+        <div class="card-number">1</div>
+        <h3>Requirements</h3>
+        <img src="{% static 'images/id_clipart.jpg' %}" alt="Required documents for e-bike registration" class="card-image">
+        <ul>
+          <li>Valid ID (government-issued)</li>
+          <li>Proof of Purchase: Receipt, Sales Invoice, or Deed of Sale</li>
+          <li>E-bike Serial Number</li>
+          <li>Recent Photos of the E-bike</li>
+          <li>Road Safety Seminar Certificate (if required)</li>
+        </ul>
+
+     <div class="highlight" data-img="{% static 'images/spes_brand.jpg' %}" onclick="openModal(this.getAttribute('data-img'))">
+       Brand-Specific Requirements </div>
+  </div>
+
+      <div class="card">
+        <div class="card-number">2</div>
+        <h3>Steps to Register</h3>
+        <img src="{% static 'images/city_hall.jpg' %}" alt="City hall registration process" class="card-image">
+        <ol>
+          <li><strong>Visit City Hall:</strong> Go to the designated registration office.</li>
+          <li><strong>Submit All Requirements:</strong> Provide the required documents for verification.</li>
+          <li><strong>Receive Processing Form:</strong> Once your documents are checked, you will be given a
+            registration form to fill out.</li>
+          <li><strong>Pay the Registration Fee:</strong> Proceed to the payment counter and pay.</li>
+          <li><strong>Return to ENRO:</strong> After payment, go back to the ENRO to receive your e-bike number.</li>
+        </ol>
+        <div class="highlight" data-img="{% static 'images/regis_fees.jpg' %}" onclick="openModal(this.getAttribute('data-img'))">Registration Fees</div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <div class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+  const messagesDiv = document.getElementById('django-messages');
+    if (messagesDiv) {
+    const messages = messagesDiv.querySelectorAll('p');
+    messages.forEach(msg => {
+      alert(msg.textContent);
+        });
+      }
+    });
+  </script>
+
+
+</body>
+</html>
